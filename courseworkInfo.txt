@@ -1,0 +1,196 @@
+Details of Coursework
+The task for the coursework is that you will divide yourselves into groups of 3 and pick a reference (related to the lectures but in topics not covered in them) to read and present in detail as a group. Everyone in the group gets the same score --- the poster coursework is a group project. You will prepare and submit a poster and do an associated 15 minute poster presentation, and prepare to answer questions based on the paper/poster.
+
+The poster, the oral presentation and the Q&A session, all 3 will be graded.
+The presentation material is your choice.
+
+You might want to use generative-AI to help with the coursework,
+but if you do so, you are necessarily required to declare its usage. 
+
+Note the set of instructions numbered A to H that follow.
+And at the end of this page we have given a list of suggestions but you can pick your own - just check with us first.
+
+
+A.
+You are responsible for finding your own team, and notifying us of the members. 
+Notification deadline is 27th March i.e the last Friday before Easter Break by when you should let us know as to who is your group of 3 and what are you preparing the poster on. So, you have ~2 months from the start of the course to decide on this outline plan. One of your group members needs to send me (anirbit.mukherjee@manchester.ac.uk) an email with the details, with cc to other group members with an email subject title of [COMP 34312 Poster Details].
+
+
+B.
+The poster session will be 10 AM - 12 PM and then 1PM - 2PM on 8th May with a reserve day of 11th May at the same times, if we cannot fit everyone on the first option. You are advised to come before time and set up the poster.
+
+So, you have ~3 months from the start of the course to prepare your poster. This is not at all a long time to prepare given what is expected of a good poster (see the point E) and hence, you are advised to read ahead and start preparing immediately.
+
+C.
+Submission will require a PDF of the poster, apart from the in-person on a screen presentation explained above.
+
+
+D.
+The rooms Collab 1 and 2 have 12 setups of a large screen with a desk with several chairs. For their presentation, each group will be assigned a time slot and one of these setups. They would project their poster onto the screen and present it to the marker assigned to that session.
+    
+In any one round, there would be at most 6 groups presenting simultaneously at their assigned alternate setups spread across Collab 1 and 2. The markers will be the lecturers and some of the GTAs. We anticipate requiring not more than 6 rounds, each with at most 6 presentations and each round should take not more than 30 minutes.
+
+E.
+You are advised to carefully study the advice in the following file,
+How-To-Score-High-On-Poster-Coursework.pdf 
+
+F.
+Software: you are free to use any software you wish to create the poster:
+Powerpoint, Google Slides, Latex, are all good choices.
+
+For inspiration here are some examples of posters from various ML academics.
+Poster-Burgers.pdf,Poster-LMC.pdf,Poster-Features.pdf,
+Poster-MI.pdf,Poster-Stability.pdf,Poster-Information.pdf
+
+You can find the official UoM poster template here,
+-which is set to a portrait mode.
+
+If you prefer a landscape mode then as a poster template you could use thisLinks to an external site..
+This also acts another ML poster example. 
+
+Both of the above are a collection of LaTeX files which is best compiled as a single project on OverleafLinks to an external site.. 
+
+G.
+Here are some links to advice on how to make a good poster,
+https://deeplearningindaba.com/2022/indaba/posters/Links to an external site. 
+https://www.animateyour.science/post/best-examples-of-scientific-postersLinks to an external site.
+https://graphicdesign.stackexchange.com/questions/9452/examples-of-good-academic-poster-designLinks to an external site.
+
+
+H.
+Options for the Poster Coursework
+
+- Whenever a theorem/lemma number is mentioned as a suggestion its expected that its proof will be an integral part of the eventual presentation.
+
+- Whenever a proof is presented, it is expected that proofs of all results invoked inside it are also to presented.
+
+- The suggested references span a range of technical depth.
+   To help you choose a topic we have done a 3-way labelling of the references, 
+[CORE]
+These could easily have been covered in a few additional lecture sessions in this course.
+
+[INTERMEDIATE]
+They are related to the lecture topics and start to introduce slightly more involved ideas than what has been taught.
+
+[CHALLENGING] 
+To understand these, you’ll need to learn a significantly new concept beyond the lectures.
+
+- Selecting a CHALLENGING reference will not guarantee higher grades, just as choosing a CORE marked option will not restrict what grades you can achieve. No reference is inherently better than another; they simply differ in focus.
+
+ 
+
+The following paper suggestions are based on CORE material of the course.
+
+Title 
+Details
+Bias/Variance is not the same as Approximation/Estimation	https://openreview.net/pdf?id=4TnFbv16hKLinks to an external site.
+Reconciling modern machine learning practice and the bias-variance trade-off	https://arxiv.org/abs/1812.11118Links to an external site.
+KNN in high-dimensions 	
+https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote02_kNN.htmlLinks to an external site.
+
+For more details feel free to check the paper linked at the bottom of the above and this,
+https://www.jmlr.org/papers/volume11/radovanovic10a/radovanovic10a.pdfLinks to an external site. 
+
+Do a study of AdaBoost	https://engineering.purdue.edu/kak/Tutorials/AdaBoost.pdfLinks to an external site. 
+Do a study of MLE and MAP 	
+You might want to start with this,
+https://www.robots.ox.ac.uk/~az/lectures/est/lect34.pdfLinks to an external site.
+
+Also see these set of 3 lectures,
+https://www.cs.cmu.edu/~aarti/Class/10701_Spring14/slides/MLE_MAP_Part1.pdfLinks to an external site. 
+https://www.cs.cmu.edu/~aarti/Class/10701_Spring14/slides/MLE_MAP_Part2.pdfLinks to an external site. 
+https://www.cs.cmu.edu/~aarti/Class/10701_Spring14/slides/BayesClassifier.pdfLinks to an external site. 
+
+This might also be helpful, https://www.cs.ubc.ca/~fwood/CS340/lectures/L26.pdfLinks to an external site. 
+
+Do a study of the various popular deep-learning algorithms.	Interestingly all good deep-learning algorithms are gradient based optimizers!
+https://www.ruder.io/optimizing-gradient-descent/Links to an external site. 
+Do a study on the interplay between learning-rate and batch-size.	You might want to start from here,
+https://arxiv.org/abs/1711.00489Links to an external site. 
+(if interested feel free to enquire for more modern references on the above!) 
+Do a study on the double-descent phenomenon in deep-learning.	You might want to start from here,
+https://openai.com/index/deep-double-descent/Links to an external site.
+The detailed version of the above overview is in the following paper, 
+https://iopscience.iop.org/article/10.1088/1742-5468/ac3a74Links to an external site.
+Do a study on the idea of "Causal ML"	
+Try Chapters 9 and 10 from  https://mlstory.orgLinks to an external site. 
+Understanding deep-learning requires rethinking generalization.	https://arxiv.org/abs/1611.03530Links to an external site. 
+Do a study of Gradient Descent (GD) convergence on smooth convex functions.	
+This is already suggested as background reading for Chapter-9 of the notes,
+
+Chapter-9 uses this result without proof. 
+
+Theorem 3.4 in https://arxiv.org/pdf/2301.11235Links to an external site.
+
+This is a foundational result about GD.
+Note that 2 different proofs are given and there is a Corollary 3.5.
+Try to cover all of it.
+
+What is a Good Step-Length for GD? (Level 1)	Lemma 5.3 in https://openreview.net/pdf?id=ABT1XQLbOxLinks to an external site.
+
+(this was work done by a previous student of the class COMP34312)
+Fastest Gradient Based Optimization of Smooth Convex Functions (Level 1)	
+> This is arguably the most famous result in the history of GD.
+
+Nesterov Acceleration : as given in Theorem 3.19 of https://arxiv.org/pdf/1405.4980Links to an external site.
+
+Momentum Gradient Descent	https://distill.pub/2017/momentum/Links to an external site.
+Sub-Gradient Descent	Theorem 4.2 (and maybe 4.3), hereLinks to an external site..
+SGD for Strongly Convex Functions	Theorem 11.1 and 11.2, https://yuxinchen2020.github.io/large_scale_optimization/lectures/stochastic_gradient.pdfLinks to an external site.
+Do a study on the idea of "algorithmic stability"	You might want to start from Proposition 1 in Chapter 6 of https://mlstory.orgLinks to an external site.
+To understand Proposition 1, one might need to read pages 1 to 13
+
+
+The following suggestion can be said to be at an INTERMEDIATE level.
+
+
+Title 
+Details
+What is a Good Step-Length for GD? (Level 2)	Lemma 5.3 in https://openreview.net/pdf?id=ABT1XQLbOxLinks to an external site.
+And also want to cover Theorem 2.2
+
+(this was work done by a previous student of the class COMP34312)
+Fastest Gradient Based Optimization of Smooth Convex Functions (Level 2) 	
+> This is arguably the most famous result in the history of GD.
+
+Nesterov Acceleration : as given in Theorem 3.19 of https://arxiv.org/pdf/1405.4980Links to an external site.
+
+And  also cover the argument for why the above is the fastest possible such method, as explained in Theorem 3.14 of above.
+You can also see other such speed-limits given in Theorems 3.13 and 3.15 of above
+
+
+Interpolation, PL Condition and Exponentially Fast SGD 	Theorem 1 in https://arxiv.org/pdf/1811.02564 Links to an external site.
+(optionally also cover Theorem 2)
+VC Dimension Upperbounds Rademacher Complexity - for Binary Class Predictors.	Page-1 of, https://home.ttic.edu/~tewari/lectures/lecture10.pdfLinks to an external site. 
+Then, https://home.ttic.edu/~tewari/lectures/lecture11.pdfLinks to an external site. 
+Do a study of the basics of formal theory of optimization. 	See Chapters 2 and 3 here, https://damek.github.io/teaching/orie6300/ORIE6300Fall2023notes.pdfLinks to an external site.
+Try to do (and present) some of the exercises - even if the easier ones.
+
+These papers are somewhat more CHALLENGING.
+They go well beyond the scope of the course, but you may like to take on a challenge...
+
+Title 
+Details
+What is a Good Step-Length for GD? (Level 3)	Lemma 5.3 in https://openreview.net/pdf?id=ABT1XQLbOxLinks to an external site.
+
+And Theorem 2.1
+
+(this was work done by a previous student of the class COMP34312)
+Fastest Gradient Based Optimization of Smooth Convex Functions (Level 3) 	
+> This is arguably the most famous result in the history of GD.
+
+Nesterov Acceleration : as given in Theorem 3.19 of https://arxiv.org/pdf/1405.4980Links to an external site.
+
+And somewhat surprisingly, very recently ChatGPT could be used to discover new things about Nesterov Acceleration algorithm. See, https://arxiv.org/abs/2510.23513Links to an external site. 
+
+Low Degree Algorithm for PAC Learning
+
+Theorem 3.29 in https://arxiv.org/pdf/2105.10386Links to an external site. and its specific consequence given on page 81. To understand this, it is possibly necessary to read Section 3.4 from the start, and a few things before that.
+What is a Good Step-Length for (Stochastic) GD?	There is no clear answer to this, but see,
+Theorem 2 of https://arxiv.org/pdf/1912.03194Links to an external site.  
+To appreciate this notice the failure case of basic SGD explained in Remark-1.
+You might also consider covering Theorem 3 and the much advanced Section 3.2
+Linear Regression Over Features and Very Wide Neural Nets	https://rbcborealis.com/research-blogs/the-neural-tangent-kernel/Links to an external site.
+Gradient Flow	https://rbcborealis.com/research-blogs/gradient-flow/Links to an external site.
+A General Upperbound on Rademacher Complexity	Sections 1 and 2 of https://home.ttic.edu/~tewari/lectures/lecture14.pdfLinks to an external site. 
+Sections 1 and 2 of https://home.ttic.edu/~tewari/lectures/lecture15.pdfLinks to an external site. 

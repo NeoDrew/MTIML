@@ -4,16 +4,17 @@
   colspace=11mm,subcolspace=6mm]{tikzposter}
 
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
 \usepackage{amsmath,amssymb,booktabs}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{xcolor}
 \pgfplotsset{compat=1.18}
-\usetikzlibrary{arrows.meta,positioning,calc}
+\usetikzlibrary{arrows.meta,positioning,calc,shadows}
 
 \usetheme{Default}
-\useblockstyle{Default}
-\usetitlestyle{Filled}
 
 \definecolor{posterNavy}{RGB}{15,35,80}
 \definecolor{posterMagenta}{RGB}{210,25,110}
@@ -21,6 +22,9 @@
 \definecolor{posterGrey}{RGB}{245,245,245}
 \definecolor{posterGreen}{RGB}{0,120,110}
 \definecolor{posterOrange}{RGB}{230,130,30}
+\definecolor{posterAccent}{RGB}{255,170,60}
+\definecolor{posterBgTop}{RGB}{248,250,253}
+\definecolor{posterBgBot}{RGB}{236,240,247}
 
 \definecolorpalette{NavyMagenta}{%
   \definecolor{colorOne}{named}{posterNavy}%
@@ -29,7 +33,7 @@
 }
 \usecolorpalette{NavyMagenta}
 
-\colorlet{backgroundcolor}{white}
+\colorlet{backgroundcolor}{posterBgTop}
 \colorlet{framecolor}{posterNavy}
 \colorlet{titlebgcolor}{posterNavy}
 \colorlet{titlefgcolor}{white}
@@ -38,20 +42,94 @@
 \colorlet{blockbodybgcolor}{white}
 \colorlet{blockbodyfgcolor}{black}
 
+% --- soft gradient background ---
+\definebackgroundstyle{StylishBg}{
+  \draw[inner sep=0pt,outer sep=0pt,top color=posterBgTop,bottom color=posterBgBot]
+    (bottomleft) rectangle (topright);
+}
+\usebackgroundstyle{StylishBg}
+
+% --- bold title bar with gradient + accent stripes ---
+\definetitlestyle{StylishTitle}{
+  width=\paperwidth, roundedcorners=0, linewidth=0pt,
+  innersep=26pt, titletotopverticalspace=0mm,
+  titletoblockverticalspace=14mm,
+  titlegraphictotitledistance=0pt
+}{
+  % deep navy → midnight gradient
+  \shade[top color=posterNavy!92,bottom color=posterNavy]
+    (\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+  % subtle decorative diagonal lines on the right
+  \begin{scope}
+    \clip (\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+    \foreach \i in {0,...,40}{
+      \draw[white,opacity=0.04,line width=1pt]
+        ($(\titleposright,\titlepostop)+(-\i*30pt,0)$) --
+        ($(\titleposright,\titleposbottom)+(-\i*30pt-180pt,0)$);
+    }
+  \end{scope}
+  % bottom accent: thick magenta + thin amber
+  \fill[posterMagenta] (\titleposleft,\titleposbottom) rectangle (\titleposright,\titleposbottom+11pt);
+  \fill[posterAccent]  (\titleposleft,\titleposbottom+11pt) rectangle (\titleposright,\titleposbottom+15pt);
+  % top hairline
+  \fill[posterMagenta!70] (\titleposleft,\titlepostop-3pt) rectangle (\titleposright,\titlepostop);
+}
+\usetitlestyle{StylishTitle}
+
+% --- rounded block with soft drop shadow & accent rule under title ---
+\defineblockstyle{Stylish}{
+  titlewidthscale=1, bodywidthscale=1, titlecenter,
+  titleoffsetx=0pt, titleoffsety=0pt,
+  bodyoffsetx=0pt, bodyoffsety=0pt,
+  bodyverticalshift=0pt,
+  roundedcorners=14, linewidth=0.7pt,
+  titleinnersep=11pt, bodyinnersep=14pt
+}{
+  \draw[draw=posterNavy!18,line width=0.7pt,fill=blockbodybgcolor,
+        rounded corners=\blockroundedcorners,
+        drop shadow={shadow xshift=0pt,shadow yshift=-3pt,opacity=0.18,fill=posterNavy}]
+    (blockbody.south west) rectangle (blockbody.north east);
+  \ifBlockHasTitle
+    \draw[draw=none,fill=blocktitlebgcolor,rounded corners=\blockroundedcorners]
+      (blocktitle.south west) rectangle (blocktitle.north east);
+    % square the bottom edge so title sits flush on body
+    \fill[blocktitlebgcolor]
+      (blocktitle.south west) rectangle
+      ([yshift=\blockroundedcorners pt]blocktitle.south east);
+    % thin accent rule
+    \fill[posterAccent]
+      ([yshift=-1pt]blocktitle.south west) rectangle
+      ([yshift=-4pt]blocktitle.south east);
+  \fi
+}
+\useblockstyle{Stylish}
+
 \newcommand{\F}{\mathcal{F}}
 \newcommand{\Hc}{\mathcal{H}}
 \newcommand{\X}{\mathcal{X}}
 \newcommand{\Rad}{\mathfrak{R}}
 
-\newcommand{\miniheadline}[1]{\vspace{0.15em}\noindent\textbf{#1}}
-\newcommand{\smallbox}[1]{\begin{center}\fbox{\begin{minipage}{0.88\linewidth}\centering #1\end{minipage}}\end{center}}
+\newcommand{\miniheadline}[1]{\vspace{0.15em}\noindent\textcolor{posterMagenta}{\textbf{#1}}}
+\newcommand{\smallbox}[1]{%
+  \begin{center}%
+  \begin{tikzpicture}
+    \node[draw=posterMagenta,line width=1pt,fill=posterPinkLight,rounded corners=8pt,
+          inner sep=10pt,text width=0.86\linewidth,align=center]
+      {#1};
+  \end{tikzpicture}%
+  \end{center}}
 
 
 %Title
-\title{\parbox{\linewidth}{\centering VC Dimension Upper-Bounds Rademacher Complexity\\[-0.25em]
-\normalsize A classical route from infinite hypothesis classes to uniform generalisation}}
-\author{Jay Parekh, Yeshwanth Patil, Andrew Robertson}
-\institute{COMP34312, The University of Manchester}
+\title{%
+  \parbox{0.92\linewidth}{\centering
+    {\fontsize{72}{82}\selectfont\bfseries VC Dimension Upper-Bounds Rademacher Complexity}\\[0.55em]
+    {\fontsize{30}{36}\selectfont\itshape\color{posterAccent}%
+      A classical route from infinite hypothesis classes to uniform generalisation}%
+  }%
+}
+\author{\fontsize{26}{30}\selectfont Jay Parekh \,\textcolor{posterAccent}{\textbullet}\, Yeshwanth Patil \,\textcolor{posterAccent}{\textbullet}\, Andrew Robertson}
+\institute{\fontsize{20}{24}\selectfont\color{white!80!posterNavy} COMP34312 \,\textbullet\, The University of Manchester}
 
 \begin{document}
 \maketitle[width=\paperwidth,titletotopverticalspace=0mm,titletoblockverticalspace=5mm]
