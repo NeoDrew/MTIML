@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11. Cheat-sheet & Q&A · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Chapter 11</div>
+      <h1>Cheat-sheet &amp; Q&amp;A</h1>
+      <p class="subtitle">Everything on one page; common viva questions with model answers.</p>
+    </header>
+
+    <article>
+
+      <h2>The chain in one image</h2>
+
+      <div class="chain">
+        <span class="chain-step">$\mathbb E\sup(\widehat R - R)$</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">$2\,\mathfrak R_m(\mathcal F)$</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">$\sqrt{\tfrac{2\ln \Pi_{\mathcal F}(m)}{m}}$</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">$\sqrt{\tfrac{2d\ln(em/d)}{m}}$</span>
+      </div>
+
+      <h2>Definitions you should know cold</h2>
+
+      <ul>
+        <li><strong>Population risk</strong>: $R(f) = \mathbb E_{(x,y)}[\ell(y, f(x))]$.</li>
+        <li><strong>Empirical risk</strong>: $\widehat R(f) = \tfrac{1}{m}\sum_i \ell(y_i, f(x_i))$.</li>
+        <li><strong>Rademacher complexity</strong>: $\mathfrak R_m(\mathcal H) = \mathbb E_{S,\varepsilon}\bigl[\sup_{h\in\mathcal H}\tfrac1m\sum \varepsilon_i h(z_i)\bigr]$, $\varepsilon_i$ i.i.d. $\pm 1$.</li>
+        <li><strong>Restriction</strong>: $\mathcal F\big|_{x_1^m} = \{(f(x_1),\dots,f(x_m)) : f\in\mathcal F\}\subseteq\{\pm 1\}^m$.</li>
+        <li><strong>Growth function</strong>: $\Pi_{\mathcal F}(m) = \max_{x_1^m}|\mathcal F\big|_{x_1^m}|$.</li>
+        <li><strong>Shattering</strong>: $\{x_1,\dots,x_m\}$ is shattered if $\mathcal F\big|_{x_1^m}=\{\pm 1\}^m$.</li>
+        <li><strong>VC dimension</strong>: $\mathrm{VCdim}(\mathcal F) = \max\{m : \Pi_{\mathcal F}(m) = 2^m\}$, equivalently the size of the largest shattered set.</li>
+      </ul>
+
+      <h2>Theorems you should know cold</h2>
+
+      <table class="examples">
+        <thead><tr><th>Name</th><th>Statement</th></tr></thead>
+        <tbody>
+          <tr><td>Symmetrisation</td><td>$\mathbb E\sup(\widehat R - R) \le 2\,\mathfrak R_m$</td></tr>
+          <tr><td>0–1 loss identity</td><td>$\mathfrak R_m(\phi_{\mathcal F}) = \tfrac12\,\mathfrak R_m(\mathcal F)$</td></tr>
+          <tr><td>Massart</td><td>$\mathbb E\sup_{a\in\mathcal A}\tfrac1m\sum \varepsilon_i a_i \le r\sqrt{2\ln|\mathcal A|}/m$</td></tr>
+          <tr><td>Theorem 1.1</td><td>$\mathfrak R_m(\mathcal F) \le \sqrt{2\ln \Pi_{\mathcal F}(m) / m}$</td></tr>
+          <tr><td>Halfspaces</td><td>$\mathrm{VCdim}(\text{halfspaces in }\mathbb R^d) = d+1$</td></tr>
+          <tr><td>Theorem 2.2</td><td>$\mathrm{VCdim}(\mathrm{sgn}\circ\mathcal G) \le \dim(\mathcal G)$</td></tr>
+          <tr><td>Sauer</td><td>$\Pi_{\mathcal F}(m) \le \sum_{i=0}^d \binom mi$</td></tr>
+          <tr><td>Corollary 3.1</td><td>$\Pi_{\mathcal F}(m) \le (em/d)^d$ for $m\ge d$</td></tr>
+          <tr><td>Final</td><td>$\mathfrak R_m(\mathcal F) \le \sqrt{2d\ln(em/d)/m}$ for $m\ge d$</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Proofs you should be able to reconstruct</h2>
+
+      <div class="callout callout-key">
+        <div class="callout-label">The four core proofs</div>
+        <ol>
+          <li><strong>Massart's lemma.</strong> Jensen on $e^{\lambda \mu}$ → sup ≤ sum → independence + cosh bound → optimise $\lambda = \sqrt{2\ln|\mathcal A|}/r$.</li>
+          <li><strong>Halfspace lower bound.</strong> Shatter $\{0, e_1, \dots, e_d\}$ via $\theta = -b_0$, $w_i = \theta + b_i$.</li>
+          <li><strong>Radon's lemma.</strong> Underdetermined system $\sum\lambda_i x_i = 0, \sum \lambda_i = 0$. Split by sign of $\lambda^*_i$. Common convex combination.</li>
+          <li><strong>Sauer's lemma.</strong> Induction on $m+d$. $|\mathcal F_1| = |\mathcal F_2| + |\mathcal F_3|$. $\mathcal F_3$ has VCdim $\le d-1$. Pascal.</li>
+        </ol>
+      </div>
+
+      <h2>Worked numbers to memorise</h2>
+
+      <ul>
+        <li>Trivial Rademacher bound: $\sqrt{2\ln 2} \approx 1.18$ — useless.</li>
+        <li>Halfspaces in $\mathbb R^d$: VCdim $= d+1$ ⇒ bound $\sim \sqrt{(d+1)\ln(em/(d+1)) / m}$.</li>
+        <li>Sample complexity: $m = \tilde O(d/\varepsilon^2)$ to achieve generalisation gap $\varepsilon$.</li>
+        <li>Convex polygons in $\mathbb R^2$ (no vertex limit): VCdim $= \infty$ ⇒ no uniform convergence.</li>
+      </ul>
+
+      <h2>Q&amp;A drills</h2>
+
+      <h3>Q1. Why is Rademacher complexity the right complexity measure?</h3>
+
+      <p>Three reasons. (i) <em>Symmetrisation</em> says it's an upper bound on the generalisation gap, so bounding it suffices. (ii) It is <em>distribution-aware</em> — unlike VC, it depends on $D$, so it can be tighter. (iii) It <em>composes</em> well: contraction shows that Lipschitz losses don't blow up Rademacher by more than a constant factor.</p>
+
+      <h3>Q2. Why does the bound have a square root?</h3>
+
+      <p>Massart's lemma. The proof minimises $\ln|\mathcal A|/\lambda + \lambda r^2/2$ over $\lambda$. The optimum is at $\lambda \propto \sqrt{\ln|\mathcal A|}$, giving an optimal value $\propto r\sqrt{\ln|\mathcal A|}$. The square root is the signature of sub-Gaussian concentration — anything that looks like a maximum-of-Gaussians has a $\sqrt{\ln N}$ scaling.</p>
+
+      <h3>Q3. Where does VC dimension actually enter the chain?</h3>
+
+      <p>Only at one step: Sauer's lemma. Everything before (symmetrisation, Massart, the Theorem 1.1 application) is general. VC dimension is what bounds $\Pi_{\mathcal F}(m)$ by a polynomial in $m$, which is what makes the final bound shrink as $m \to \infty$.</p>
+
+      <h3>Q4. Why does Radon's lemma need exactly $d+2$ points, not $d+1$?</h3>
+
+      <p>The system has $d+1$ equations: $d$ "linear" (one per coordinate of $\mathbb R^d$) plus $1$ "affine" ($\sum \lambda_i = 0$). To guarantee a non-trivial solution we need strictly more unknowns than equations: $d + 2$. With only $d+1$ points the system might admit only the zero solution.</p>
+
+      <h3>Q5. Why is the affine constraint $\sum \lambda_i = 0$ in Radon's lemma?</h3>
+
+      <p>It forces both signs to appear among the $\lambda_i$. Without it, all $\lambda_i$ might be positive, and we couldn't split them into a non-empty $P$ and a non-empty $N$. The affine constraint is exactly what guarantees the partition.</p>
+
+      <h3>Q6. What's an example of a class with infinite VC dimension?</h3>
+
+      <p>Convex polygons in $\mathbb R^2$ (no vertex bound). Take $m$ points on a circle. For any subset, draw a polygon with vertices placed just outside that subset and faces cutting between the chosen and unchosen points. Every $2^m$ labelling is achievable, for every $m$. Hence VCdim $= \infty$.</p>
+
+      <h3>Q7. How does this relate to deep learning?</h3>
+
+      <p>Modern neural networks have VC dimension that scales with the number of parameters, which is enormous — often greater than $m$. Our VC bound is then vacuous. This is exactly the puzzle posed by Zhang et al. ("Understanding deep learning requires rethinking generalization", 2017) — they showed nets can fit random labels yet still generalise on real data. Resolving this requires bounds based on margins, optimisation dynamics, or the algorithm itself, not just the class.</p>
+
+      <h3>Q8. Is finite VC dimension necessary for PAC learning?</h3>
+
+      <p>Yes — for binary classification under 0–1 loss, the <em>fundamental theorem of statistical learning</em> says finite VC ⇔ uniform convergence ⇔ PAC learnable (agnostic or realisable) ⇔ ERM works. Infinite VC ⇒ no algorithm can succeed in the worst case, by a no-free-lunch argument.</p>
+
+      <h3>Q9. Why ±1 instead of $\{0, 1\}$?</h3>
+
+      <p>Pure convention; both are used. The $\pm 1$ encoding makes the algebra around Rademacher signs cleaner (e.g. $1[y \ne y'] = (1 - yy')/2$ is symmetric). Sauer's lemma and VC dim are unchanged because the structure of the labelling lattice $\{0,1\}^m$ and $\{\pm1\}^m$ are isomorphic.</p>
+
+      <h3>Q10. What can break the entire chain?</h3>
+
+      <p>Three things, listed by likelihood: (i) the class is infinite-VC, so Sauer offers no help; (ii) the loss is not bounded or not Lipschitz, breaking Massart and contraction; (iii) data is not i.i.d., breaking symmetrisation. Any of these requires a different theory — VC bounds are specifically about i.i.d. binary classification with bounded losses.</p>
+
+      <h2>"In the room" cheat lines</h2>
+
+      <p>Lines you can drop verbatim during a Q&amp;A and sound competent:</p>
+
+      <ul>
+        <li>"Rademacher complexity captures whether the class can fit pure $\pm 1$ noise — that is the worst case for overfitting."</li>
+        <li>"The factor of two in the master theorem comes from splitting a triangle inequality after introducing the ghost sample."</li>
+        <li>"The cosh-of-Rademacher inequality is the only place randomness actually enters Massart's proof — everything else is exponential algebra."</li>
+        <li>"Sauer's lemma gives the dichotomy: the growth function is either always $2^m$ or eventually polynomial. Nothing in between."</li>
+        <li>"The $+1$ in halfspace VC dim is the bias; without it, homogeneous halfspaces have VC dim $d$."</li>
+        <li>"The bound is distribution-free, which is its strength and its limitation: it works for every $D$ but is too pessimistic for any specific $D$."</li>
+      </ul>
+
+      <h2>Last reminders before you walk in</h2>
+
+      <ul>
+        <li>Memorise the chain. If you forget anything else, you can rebuild from there.</li>
+        <li>Practice Massart's proof on paper without notes. It's the proof most likely to be asked.</li>
+        <li>For Radon, draw the picture: $d+2$ points in $\mathbb R^d$, two convex hulls intersecting at a common point.</li>
+        <li>Know the dichotomy: $2^m$ vs $m^d$. Sauer is the bridge.</li>
+        <li>If asked something off-topic, fall back on the chain — most questions reduce to one of its links.</li>
+      </ul>
+
+      <p>Good luck.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

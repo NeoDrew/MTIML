@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VC → Rademacher · Generalisation from scratch</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <section class="hero">
+      <h1>How VC dimension upper-bounds <span class="accent">Rademacher complexity</span></h1>
+      <p>A self-contained walk-through of one of the most beautiful results in statistical learning theory — built up from population risk to a clean √(d log m / m) generalisation bound, with every proof spelled out.</p>
+    </section>
+
+    <article>
+
+      <h2>The whole result, in one chain</h2>
+
+      <p>Every chapter here serves to justify a single line of reasoning. Memorise this chain — every result on the route is a step in it.</p>
+
+      <div class="chain">
+        <span class="chain-step">generalisation gap</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">2 · Rademacher</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">√(2 ln Π<sub>F</sub>(m)/m)</span>
+        <span class="chain-arrow">≤</span>
+        <span class="chain-step">√(2d ln(em/d)/m)</span>
+      </div>
+
+      <p>From left to right: <em>symmetrisation</em> swaps an unknown population error for a quantity we can analyse; <em>Massart's lemma</em> turns finite label-vector sets into a square-root entropy bound; <em>Sauer's lemma</em> says VC dimension forces polynomial growth where 2<sup>m</sup> is exponential. Compose the steps and you get uniform convergence.</p>
+
+      <h2>Who this is for</h2>
+
+      <p>Anyone who has seen population risk and empirical risk before, but is fuzzy on why finite VC dimension implies a learning algorithm generalises. We start from definitions, do every proof in full, and finish with a generalisation theorem that beats the trivial 2<sup>m</sup> bound.</p>
+
+      <h2>How to read this site</h2>
+
+      <p>Read in order. Each chapter assumes the previous ones. There are about 30–40 minutes of reading per session if you work through the proofs by hand — try to redo the algebra on paper as you go, especially the four <em>core proofs</em>:</p>
+
+      <ul>
+        <li><strong>Massart's lemma</strong> (Chapter 5) — Jensen + MGF + optimise λ.</li>
+        <li><strong>Halfspaces have VCdim d+1</strong> (Chapter 8) — explicit shattering + Radon.</li>
+        <li><strong>Radon's lemma</strong> (Chapter 8) — under-determined linear system.</li>
+        <li><strong>Sauer's lemma</strong> (Chapter 9) — induction on m+d with the F<sub>2</sub>/F<sub>3</sub> split.</li>
+      </ul>
+
+      <h2>Chapters</h2>
+
+      <div class="toc">
+        <a href="01-risk.html"><span class="num">Chapter 1</span><span class="title">Risk & generalisation</span><span class="blurb">Population risk, empirical risk, and the gap that motivates the whole theory.</span></a>
+        <a href="02-rademacher.html"><span class="num">Chapter 2</span><span class="title">Rademacher complexity</span><span class="blurb">A measure of how well a class fits random ±1 noise. The right complexity notion.</span></a>
+        <a href="03-symmetrisation.html"><span class="num">Chapter 3</span><span class="title">Symmetrisation</span><span class="blurb">The ghost-sample trick that bounds the generalisation gap by 2·Rademacher.</span></a>
+        <a href="04-growth-function.html"><span class="num">Chapter 4</span><span class="title">Growth function</span><span class="blurb">Turn a class of functions into a finite set of label vectors. Define Π<sub>F</sub>(m).</span></a>
+        <a href="05-massart.html"><span class="num">Chapter 5</span><span class="title">Massart's lemma</span><span class="blurb">From a finite vector set, a square-root bound on Rademacher complexity.</span></a>
+        <a href="06-rademacher-bound.html"><span class="num">Chapter 6</span><span class="title">Rademacher ≤ growth</span><span class="blurb">Apply Massart to label vectors. The trivial bound fails — we need VC dim.</span></a>
+        <a href="07-vc-dimension.html"><span class="num">Chapter 7</span><span class="title">VC dimension</span><span class="blurb">Shattering, the right complexity integer, and worked examples.</span></a>
+        <a href="08-halfspaces-radon.html"><span class="num">Chapter 8</span><span class="title">Halfspaces & Radon</span><span class="blurb">VCdim of halfspaces in ℝ<sup>d</sup> is d+1, via Radon's lemma.</span></a>
+        <a href="09-sauer.html"><span class="num">Chapter 9</span><span class="title">Sauer's lemma</span><span class="blurb">Finite VC dim ⇒ Π<sub>F</sub>(m) ≤ (em/d)<sup>d</sup>. Polynomial, not exponential.</span></a>
+        <a href="10-final.html"><span class="num">Chapter 10</span><span class="title">The final chain</span><span class="blurb">Composing all the pieces. The √(d log m / m) generalisation bound.</span></a>
+        <a href="11-cheatsheet.html"><span class="num">Chapter 11</span><span class="title">Cheat-sheet & Q&A</span><span class="blurb">All key results on one page, plus likely viva questions and answers.</span></a>
+      </div>
+
+      <h2>References</h2>
+
+      <ul>
+        <li>Kakade & Tewari, <em>Lecture 10: Massart's Finite Class Lemma and Growth Function</em> (CMSC 35900, Spring 2008).</li>
+        <li>Kakade & Tewari, <em>Lecture 11: VC Dimension and Sauer's Lemma</em> (CMSC 35900, Spring 2008).</li>
+        <li>Vapnik & Chervonenkis, <em>On the uniform convergence of relative frequencies of events to their probabilities</em> (1971).</li>
+        <li>Sauer, <em>On the density of families of sets</em> (1972).</li>
+        <li>Shalev-Shwartz & Ben-David, <em>Understanding Machine Learning</em> (2014), Chapters 3–6.</li>
+      </ul>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

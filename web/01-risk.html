@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. Risk & generalisation · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Chapter 1</div>
+      <h1>Risk &amp; generalisation</h1>
+      <p class="subtitle">Why training error isn't enough.</p>
+    </header>
+
+    <article>
+
+      <h2>Two kinds of risk</h2>
+
+      <p>We are given a sample $S = \{(x_1,y_1),\dots,(x_m,y_m)\}$ drawn i.i.d. from an unknown distribution $D$ over $\mathcal{X}\times\mathcal{Y}$. A predictor is a function $f:\mathcal{X}\to\mathcal{Y}$ from some hypothesis class $\mathcal{F}$. A loss function $\ell(y,y')$ measures how badly $f$ predicted on a single example.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition — population &amp; empirical risk</div>
+        <p>The <em>population risk</em> (sometimes called the true risk or expected risk) of $f$ is
+        $$ R(f) = \mathbb{E}_{(x,y)\sim D}\bigl[\ell(y, f(x))\bigr]. $$
+        The <em>empirical risk</em> on the sample $S$ is
+        $$ \widehat R(f) = \frac{1}{m}\sum_{i=1}^{m} \ell(y_i, f(x_i)). $$</p>
+      </div>
+
+      <p>For binary classification with the 0–1 loss, $\ell(y,y') = \mathbf{1}[y\ne y']$. Then $R(f)$ is the probability that $f$ misclassifies a fresh draw, and $\widehat R(f)$ is the fraction of training examples it misclassifies.</p>
+
+      <p>The two are very different objects. $R(f)$ is a number we cannot compute — we don't know $D$. $\widehat R(f)$ is a number we <em>can</em> compute, because we have the sample. Statistical learning theory is the study of when one is a useful proxy for the other.</p>
+
+      <h2>Empirical risk minimisation</h2>
+
+      <p>The standard recipe is <em>Empirical Risk Minimisation (ERM)</em>: pick the classifier in $\mathcal{F}$ that does best on the training sample.</p>
+
+      <p>$$ \widehat f \in \arg\min_{f\in\mathcal{F}}\ \widehat R(f). $$</p>
+
+      <p>ERM is a fine plan if $\widehat R(f)$ is close to $R(f)$ uniformly across $\mathcal F$, because then the $f$ that wins on the sample also nearly wins on the true distribution. If not, ERM can be disastrous: a class so flexible that it fits any sample perfectly will return $\widehat R(\widehat f) = 0$ while $R(\widehat f)$ stays large. This is overfitting.</p>
+
+      <h2>The generalisation gap</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition — generalisation gap</div>
+        <p>The <em>generalisation gap</em> of $f$ is the difference between empirical and population risk,
+        $$ \widehat R(f) - R(f). $$
+        We will mostly study its supremum over the class:
+        $$ \sup_{f\in\mathcal{F}}\bigl(\widehat R(f) - R(f)\bigr). $$</p>
+      </div>
+
+      <p>Bounding this supremum is what we actually need. Here is why a per-function bound isn't good enough.</p>
+
+      <div class="callout callout-warn">
+        <div class="callout-label">Why uniform convergence is the right goal</div>
+        <p>Suppose I tell you that for any single fixed $f$, the empirical risk concentrates: with high probability, $|\widehat R(f) - R(f)| \le \varepsilon$. That is true (Hoeffding for bounded losses). But the function ERM picks, $\widehat f$, depends on the sample — it isn't fixed in advance. To say something about $\widehat f$, we need the bound to hold <em>simultaneously</em> for every $f\in\mathcal F$. That is exactly $\sup_f(\widehat R(f) - R(f))$.</p>
+      </div>
+
+      <h2>The picture: why complexity matters</h2>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- axes -->
+          <line x1="60" y1="220" x2="500" y2="220" stroke="#5a6478" stroke-width="1.5"/>
+          <line x1="60" y1="220" x2="60"  y2="20"  stroke="#5a6478" stroke-width="1.5"/>
+          <text x="280" y="250" text-anchor="middle" fill="#5a6478" font-size="13">complexity of class $\mathcal{F}$</text>
+          <text x="22"  y="120" fill="#5a6478" font-size="13" transform="rotate(-90 22 120)">error</text>
+
+          <!-- training error: monotonic decrease -->
+          <path d="M 80,80 C 180,170 300,200 480,212" stroke="#0F2350" stroke-width="3" fill="none"/>
+          <!-- test error: U shape -->
+          <path d="M 80,90 C 180,150 270,140 360,150 C 420,158 460,135 490,80" stroke="#D2196E" stroke-width="3" fill="none"/>
+
+          <text x="490" y="208" fill="#0F2350" font-size="12" text-anchor="end">training risk $\widehat R$</text>
+          <text x="490" y="68"  fill="#D2196E" font-size="12" text-anchor="end">true risk $R$</text>
+
+          <!-- sweet spot -->
+          <line x1="290" y1="140" x2="290" y2="220" stroke="#FFAA3C" stroke-dasharray="4 4" stroke-width="1.5"/>
+          <text x="290" y="240" text-anchor="middle" fill="#b67100" font-size="12">sweet spot</text>
+        </svg>
+        <div class="diagram-caption">As the class becomes more flexible, training error monotonically falls but true risk first falls then rises. The vertical gap between the two curves is what we will bound.</div>
+      </div>
+
+      <p>A class that is "too small" can't even fit the data — both risks are large. A class that is "too big" memorises the data — training risk is tiny but true risk is back up. Generalisation theory tells us how to formalise the size of the class so we can predict this curve.</p>
+
+      <h2>The question we will answer</h2>
+
+      <div class="callout callout-key">
+        <div class="callout-label">The driving question</div>
+        <p>Given a hypothesis class $\mathcal F$, when is</p>
+        <p>$$ \mathbb{E}_S\!\left[\sup_{f\in\mathcal{F}}\bigl(\widehat R(f) - R(f)\bigr)\right] $$</p>
+        <p>small? In particular: when does it shrink to $0$ as $m\to\infty$?</p>
+      </div>
+
+      <p>The answer turns out to be: precisely when $\mathcal F$ has finite <em>VC dimension</em>, a single integer that measures how flexible the class can be on finite samples. Getting from "finite VC dim" to "small generalisation gap" takes most of the rest of this site.</p>
+
+      <h2>What's next</h2>
+
+      <p>The next chapter introduces the central object — Rademacher complexity — which we will then use as a proxy for the generalisation gap.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. Symmetrisation · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Chapter 3</div>
+      <h1>Symmetrisation: the master theorem</h1>
+      <p class="subtitle">The ghost-sample trick that turns generalisation into Rademacher complexity.</p>
+    </header>
+
+    <article>
+
+      <h2>The statement</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Theorem — symmetrisation / master theorem</div>
+        <p>Let $\mathcal H$ be a class of real-valued functions and let $S = (z_1,\dots,z_m)$ be i.i.d. samples from a distribution. Then
+        $$ \mathbb{E}_S\!\left[\sup_{h\in\mathcal H}\Bigl(\tfrac{1}{m}\sum_{i=1}^m h(z_i)\,-\,\mathbb E[h(z)]\Bigr)\right] \;\le\; 2\,\mathfrak{R}_m(\mathcal H). $$</p>
+      </div>
+
+      <p>Read the left-hand side carefully. It is the expected worst-case gap between the empirical average and the true mean of $h$, taken over all $h\in\mathcal H$. That is exactly the generalisation gap (taking $h(z) = \ell(y, f(x))$). The theorem says: this gap is bounded by twice the Rademacher complexity.</p>
+
+      <p>So if we can bound $\mathfrak R_m$, we get a generalisation guarantee for free.</p>
+
+      <h2>The ghost-sample trick</h2>
+
+      <p>The proof is short but ingenious. Three ideas:</p>
+
+      <ol>
+        <li>Replace the unknown true mean by an empirical mean on an <em>independent copy</em> of the sample (the "ghost sample").</li>
+        <li>Both samples are i.i.d. from the same distribution, so the differences $h(z_i) - h(z_i')$ are <em>symmetric</em> — flipping their sign does not change the joint distribution.</li>
+        <li>Inject a Rademacher sign $\varepsilon_i$ into each term. By symmetry, this leaves the joint distribution unchanged. Now the expression is exactly Rademacher-shaped.</li>
+      </ol>
+
+      <h2>The proof</h2>
+
+      <div class="proof">
+        <span class="proof-label">Proof.</span>
+
+        <p><strong>Step 1: introduce the ghost sample.</strong> Let $S' = (z_1', \dots, z_m')$ be an independent copy of $S$, drawn from the same distribution. Then for any $h$,
+        $$ \mathbb{E}[h(z)] = \mathbb{E}_{S'}\!\left[\tfrac{1}{m}\sum_{i=1}^m h(z_i')\right]. $$
+        Substitute this into the gap:</p>
+
+        <p>$$ \sup_h\Bigl(\tfrac{1}{m}\sum h(z_i) - \mathbb{E}[h]\Bigr) = \sup_h \mathbb{E}_{S'}\!\left[\tfrac{1}{m}\sum_i \bigl(h(z_i) - h(z_i')\bigr)\right]. $$</p>
+
+        <p><strong>Step 2: pull the supremum inside.</strong> The supremum of an expectation is at most the expectation of the supremum (Jensen's inequality applied to the convex function $\sup$):</p>
+
+        <p>$$ \sup_h \mathbb{E}_{S'}[\cdots] \le \mathbb{E}_{S'}\!\left[\sup_h\,\tfrac{1}{m}\sum_i \bigl(h(z_i) - h(z_i')\bigr)\right]. $$</p>
+
+        <p>Now take the outer expectation over $S$ on both sides; since $\mathbb{E}_S\,\mathbb{E}_{S'} = \mathbb{E}_{S,S'}$,</p>
+
+        <p>$$ \mathbb{E}_S\!\left[\sup_h\Bigl(\tfrac{1}{m}\sum h(z_i)-\mathbb{E}[h]\Bigr)\right] \le \mathbb{E}_{S,S'}\!\left[\sup_h\,\tfrac{1}{m}\sum_i \bigl(h(z_i) - h(z_i')\bigr)\right]. $$</p>
+
+        <p><strong>Step 3: inject Rademacher signs.</strong> Because $z_i$ and $z_i'$ are i.i.d., the random variable $h(z_i) - h(z_i')$ is <em>symmetric</em>: it has the same distribution as $-(h(z_i) - h(z_i')) = h(z_i') - h(z_i)$. So multiplying it by $\varepsilon_i \in \{\pm 1\}$ uniformly at random doesn't change its distribution either:</p>
+
+        <p>$$ \bigl(h(z_i) - h(z_i')\bigr) \;\stackrel{d}{=}\; \varepsilon_i\bigl(h(z_i) - h(z_i')\bigr). $$</p>
+
+        <p>This holds jointly for all $i$ if we use independent $\varepsilon_i$. So we can introduce signs without changing anything:</p>
+
+        <p>$$ \mathbb{E}_{S,S'}\!\left[\sup_h \tfrac{1}{m}\sum_i (h(z_i) - h(z_i'))\right] = \mathbb{E}_{S,S',\varepsilon}\!\left[\sup_h \tfrac{1}{m}\sum_i \varepsilon_i\bigl(h(z_i) - h(z_i')\bigr)\right]. $$</p>
+
+        <p><strong>Step 4: split the supremum.</strong> Use $\sup_h(a - b) \le \sup_h a + \sup_h(-b) = \sup_h a + \sup_h b$ (the supremum of a difference is at most the sum of the suprema):</p>
+
+        <p>$$ \le\,\mathbb{E}_{S,\varepsilon}\!\left[\sup_h \tfrac{1}{m}\sum \varepsilon_i h(z_i)\right] + \mathbb{E}_{S',\varepsilon}\!\left[\sup_h \tfrac{1}{m}\sum (-\varepsilon_i) h(z_i')\right]. $$</p>
+
+        <p>Each summand is exactly $\mathfrak R_m(\mathcal H)$ (the second uses that $-\varepsilon_i$ has the same distribution as $\varepsilon_i$). So the total is $2\,\mathfrak R_m(\mathcal H)$.</p>
+
+        <p class="proof-end"></p>
+      </div>
+
+      <h2>Why this is called "symmetrisation"</h2>
+
+      <p>The trick rests entirely on the fact that the difference of two i.i.d. random variables is <em>symmetric</em> around zero — its distribution is unchanged when we negate it. That symmetry is what lets us multiply by Rademacher signs for free, and that is what introduces $\mathfrak R_m$.</p>
+
+      <p>If the two samples were not i.i.d., the trick would fail. This is also why the Rademacher complexity is defined with $\pm 1$ signs and not, say, Gaussian noise (though both work; Gaussian gives a different but related quantity called <em>Gaussian complexity</em>).</p>
+
+      <h2>What we will use</h2>
+
+      <p>From here on, we treat the master theorem as a black box. To bound the generalisation gap, it suffices to bound $\mathfrak R_m(\mathcal F)$. The rest of the site is dedicated to that bound, via combinatorial properties of $\mathcal F$.</p>
+
+      <div class="callout callout-key">
+        <div class="callout-label">From here, our task is</div>
+        <p>$$ \text{bound}\quad\mathfrak R_m(\mathcal F)\quad\text{as a function of}\quad m\ \text{and the structure of}\ \mathcal F. $$</p>
+      </div>
+
+      <p>The next two chapters describe the structural quantity that will let us do this — the <em>growth function</em> — and turn it into a Rademacher bound via Massart's lemma.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2. Rademacher complexity · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Chapter 2</div>
+      <h1>Rademacher complexity</h1>
+      <p class="subtitle">Can the class fit pure random noise?</p>
+    </header>
+
+    <article>
+
+      <h2>Rademacher random variables</h2>
+
+      <p>A <em>Rademacher random variable</em> $\varepsilon$ takes values in $\{-1, +1\}$, each with probability $1/2$. We will use a vector $\varepsilon = (\varepsilon_1, \dots, \varepsilon_m)$ of i.i.d. Rademacher variables — think of them as $m$ random coin flips translated to $\{\pm 1\}$.</p>
+
+      <p>Why this distribution? Three reasons. (i) Symmetry: $\varepsilon$ and $-\varepsilon$ have the same distribution. (ii) Bounded: $|\varepsilon_i|=1$, ideal for concentration. (iii) Match: when our class predicts $\pm 1$, sign-valued noise pairs naturally with sign-valued predictions.</p>
+
+      <h2>The definition</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition — Rademacher complexity</div>
+        <p>Let $\mathcal{H}$ be a class of real-valued functions on a domain $\mathcal{Z}$. Given $m$ samples $S = (z_1, \dots, z_m)$ drawn i.i.d. from a distribution on $\mathcal Z$, the <em>empirical Rademacher complexity</em> is
+        $$ \widehat{\mathfrak{R}}_S(\mathcal H) \;=\; \mathbb{E}_{\varepsilon}\!\left[\sup_{h\in\mathcal H}\frac{1}{m}\sum_{i=1}^{m}\varepsilon_i h(z_i)\right]. $$
+        The (population) <em>Rademacher complexity</em> averages this over the data:
+        $$ \mathfrak{R}_m(\mathcal H) \;=\; \mathbb{E}_{S}\bigl[\widehat{\mathfrak R}_S(\mathcal H)\bigr] \;=\; \mathbb{E}_{S,\varepsilon}\!\left[\sup_{h\in\mathcal H}\frac{1}{m}\sum_{i=1}^{m}\varepsilon_i h(z_i)\right]. $$</p>
+      </div>
+
+      <h2>What this number actually measures</h2>
+
+      <p>Read the inner expression as a correlation. We hand the class a string of pure $\pm 1$ noise and ask: <em>how well can some $h\in\mathcal H$ correlate with that noise on the sample?</em> If the class is rich enough that some member can mimic any random pattern, the supremum is large. If every member is too smooth or too constrained to track the noise, the supremum is small.</p>
+
+      <div class="callout callout-intuition">
+        <div class="callout-label">Intuition</div>
+        <p>$\mathfrak{R}_m(\mathcal H)$ is the expected best-case alignment between a function from $\mathcal H$ and a string of random sign labels. Formally it lives between $0$ and $\sup_{h,z}|h(z)|$. For binary classes ($h(z)\in\{\pm1\}$) it lives in $[0,1]$.</p>
+      </div>
+
+      <h2>A small worked example</h2>
+
+      <p>Let $\mathcal Z = \mathbb{R}$ and let $\mathcal H$ be the class of constant functions $\{h(z)=c : c\in\{-1,+1\}\}$. Only two functions. For any sample,</p>
+
+      <p>$$ \sup_{h\in\mathcal H}\frac{1}{m}\sum_{i=1}^{m}\varepsilon_i h(z_i)
+        = \frac{1}{m}\sup_{c\in\{-1,+1\}} c\sum_{i=1}^{m}\varepsilon_i
+        = \frac{1}{m}\Bigl|\sum_{i=1}^{m}\varepsilon_i\Bigr|. $$</p>
+
+      <p>Taking expectation over $\varepsilon$ and using the standard fact that $\mathbb{E}|\sum \varepsilon_i| \le \sqrt m$, we get $\mathfrak R_m(\mathcal H) \le 1/\sqrt m$. The class is two functions, and its complexity is small. Notice it goes to $0$ as $m \to \infty$ — that is what we want for any class that generalises.</p>
+
+      <h2>Geometric picture</h2>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- baseline -->
+          <line x1="40" y1="120" x2="500" y2="120" stroke="#cbd2e0" stroke-width="1"/>
+          <!-- random sign labels -->
+          <g font-size="13" text-anchor="middle">
+            <text x="80"  y="105" fill="#0F2350">+1</text>
+            <text x="160" y="155" fill="#0F2350">−1</text>
+            <text x="240" y="105" fill="#0F2350">+1</text>
+            <text x="320" y="105" fill="#0F2350">+1</text>
+            <text x="400" y="155" fill="#0F2350">−1</text>
+            <text x="480" y="155" fill="#0F2350">−1</text>
+          </g>
+          <!-- points on x-axis -->
+          <g fill="#0F2350">
+            <circle cx="80"  cy="120" r="4"/>
+            <circle cx="160" cy="120" r="4"/>
+            <circle cx="240" cy="120" r="4"/>
+            <circle cx="320" cy="120" r="4"/>
+            <circle cx="400" cy="120" r="4"/>
+            <circle cx="480" cy="120" r="4"/>
+          </g>
+          <!-- candidate function that aligns -->
+          <path d="M 60,90 C 120,90 120,150 180,150 C 220,150 220,90 280,90 C 320,90 320,90 360,90 C 400,90 400,150 460,150 C 480,150 480,150 500,150"
+                stroke="#D2196E" stroke-width="2.5" fill="none"/>
+          <text x="510" y="80" text-anchor="end" fill="#D2196E" font-size="12">a function in $\mathcal{H}$ that aligns with the noise</text>
+        </svg>
+        <div class="diagram-caption">Random sign labels are placed above 6 points. Rademacher complexity asks: what is the highest correlation that any $h\in\mathcal H$ can achieve with this random labelling, averaged over all sign patterns?</div>
+      </div>
+
+      <h2>Why this is the "right" complexity measure</h2>
+
+      <p>Three properties make Rademacher complexity exactly what we need.</p>
+
+      <ol>
+        <li><strong>Distribution-aware.</strong> Unlike combinatorial measures that look only at $\mathcal H$, $\mathfrak R_m$ depends on the data distribution. A class that can fit noise in some weird pocket of the input space but not where mass lives still has small $\mathfrak R_m$.</li>
+        <li><strong>Bounds the gap.</strong> The next chapter shows $\mathbb{E}\sup(\widehat R - R)\le 2\,\mathfrak R_m$. So bounding $\mathfrak R_m$ is sufficient for generalisation guarantees.</li>
+        <li><strong>Composes.</strong> If you compose with a Lipschitz function (e.g. a loss like the hinge loss), the Rademacher complexity changes by at most a constant factor. This is the <em>contraction lemma</em> — beyond our scope but worth knowing.</li>
+      </ol>
+
+      <h2>An identity we will need</h2>
+
+      <p>For binary classification with the 0–1 loss, the Rademacher complexity of the loss class equals exactly half the Rademacher complexity of the function class.</p>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Lemma (Lecture 10, 1.1)</div>
+        <p>Let $\mathcal F \subseteq \{\pm 1\}^{\mathcal X}$ and let $\phi(y',y) = \mathbf 1[y'\ne y]$ be the 0–1 loss. Let $\phi_{\mathcal F} = \{(x,y) \mapsto \phi(f(x), y) : f\in\mathcal F\}$. Then
+        $$ \mathfrak{R}_m(\phi_{\mathcal F}) = \tfrac{1}{2}\,\mathfrak{R}_m(\mathcal F). $$</p>
+      </div>
+
+      <div class="proof">
+        <span class="proof-label">Proof.</span>
+        <p>For $y, y' \in \{\pm 1\}$, $\mathbf 1[y'\ne y] = (1 - y\,y')/2$. Substitute:</p>
+        <p>$$ \mathfrak{R}_m(\phi_{\mathcal F}) = \mathbb{E}\!\left[\sup_{f}\frac{1}{m}\sum_{i=1}^m \varepsilon_i\,\frac{1 - Y_i f(X_i)}{2}\,\Big|\,X_1^m, Y_1^m\right]. $$</p>
+        <p>The constant $1$ inside the sum gives $\sum \varepsilon_i$ which has zero conditional mean and contributes $0$ after the expectation over $\varepsilon$. So</p>
+        <p>$$ \mathfrak{R}_m(\phi_{\mathcal F}) = \frac{1}{2}\,\mathbb{E}\!\left[\sup_{f}\frac{1}{m}\sum_{i=1}^m (-\varepsilon_i Y_i)\, f(X_i)\right]. $$</p>
+        <p>For each $i$, $-\varepsilon_i Y_i$ has the same joint distribution as $\varepsilon_i$ (because $\varepsilon_i$ is symmetric and independent of $Y_i$). Replacing $-\varepsilon_i Y_i$ by $\varepsilon_i$:</p>
+        <p>$$ \mathfrak{R}_m(\phi_{\mathcal F}) = \frac{1}{2}\,\mathbb{E}\!\left[\sup_{f}\frac{1}{m}\sum_{i=1}^m \varepsilon_i f(X_i)\right] = \frac{1}{2}\,\mathfrak{R}_m(\mathcal F). $$</p>
+        <p class="proof-end">Taking expectation over $X_1^m, Y_1^m$ and observing the right-hand side does not depend on $Y$ finishes the argument.</p>
+      </div>
+
+      <p>This factor of $\tfrac{1}{2}$ is why a $2$ appears in the symmetrisation theorem of the next chapter.</p>
+
+      <h2>What's next</h2>
+
+      <p>We've defined the complexity. We have not yet shown it actually controls generalisation. That is the role of the symmetrisation argument coming up.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

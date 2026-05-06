@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6. Rademacher ≤ growth · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Chapter 6</div>
+      <h1>Rademacher complexity is bounded by the growth function</h1>
+      <p class="subtitle">Apply Massart to label vectors. The trivial bound is useless.</p>
+    </header>
+
+    <article>
+
+      <h2>The theorem</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Theorem 1.1 (Lecture 11)</div>
+        <p>Let $\mathcal F \subseteq \{\pm 1\}^{\mathcal X}$ be a class of $\pm 1$-valued functions. Then
+        $$ \mathfrak R_m(\mathcal F) \;\le\; \sqrt{\frac{2\ln \Pi_{\mathcal F}(m)}{m}}. $$</p>
+      </div>
+
+      <h2>The proof</h2>
+
+      <p>This is a one-page application of Massart's lemma to the right finite set.</p>
+
+      <div class="proof">
+        <span class="proof-label">Proof.</span>
+
+        <p><strong>Step 1: rewrite Rademacher complexity in terms of label vectors.</strong> Recall that $\mathcal F\big|_{x_1^m}$ is the set of label vectors $(f(x_1), \dots, f(x_m))$ as $f$ ranges over $\mathcal F$. Since the inner sum $\sum \varepsilon_i f(x_i)$ depends on $f$ only through these values,</p>
+
+        <p>$$ \mathfrak R_m(\mathcal F) = \mathbb{E}_{S, \varepsilon}\!\left[\sup_{f\in\mathcal F}\,\frac{1}{m}\sum_{i=1}^m \varepsilon_i f(x_i)\right] = \mathbb{E}_{S, \varepsilon}\!\left[\sup_{a\,\in\,\mathcal F\big|_{x_1^m}}\,\frac{1}{m}\sum_{i=1}^m \varepsilon_i\, a_i\right]. $$</p>
+
+        <p><strong>Step 2: apply Massart's lemma.</strong> The set $\mathcal A = \mathcal F\big|_{x_1^m}$ is finite. Each $a \in \mathcal A$ has $a_i \in \{\pm 1\}$, so $\|a\|_2 = \sqrt m$. By Massart, for each fixed $S$,</p>
+
+        <p>$$ \mathbb{E}_{\varepsilon}\!\left[\sup_{a\in\mathcal A}\,\frac{1}{m}\sum \varepsilon_i a_i\right] \;\le\; \frac{\sqrt m\,\sqrt{2\ln|\mathcal A|}}{m} = \frac{\sqrt{2\ln|\mathcal F|_{x_1^m}|}}{\sqrt m}. $$</p>
+
+        <p><strong>Step 3: replace by the worst-case.</strong> Since $|\mathcal F|_{x_1^m}| \le \Pi_{\mathcal F}(m)$ for every choice of $S$, the bound holds pointwise. Take expectation over $S$:</p>
+
+        <p>$$ \mathfrak R_m(\mathcal F) \;\le\; \sqrt{\frac{2\ln \Pi_{\mathcal F}(m)}{m}}. $$</p>
+
+        <p class="proof-end"></p>
+      </div>
+
+      <p>That's it. Three steps, each one a straightforward identification or application. The work was done in proving Massart's lemma — this chapter just plugs it in.</p>
+
+      <h2>Why this matters</h2>
+
+      <p>Combine with symmetrisation:</p>
+
+      <p>$$ \mathbb{E}_S\!\left[\sup_f\bigl(\widehat R(f) - R(f)\bigr)\right] \;\le\; 2\,\mathfrak R_m(\mathcal F) \;\le\; 2\sqrt{\frac{2\ln\Pi_{\mathcal F}(m)}{m}}. $$</p>
+
+      <p>So generalisation is controlled by $\Pi_{\mathcal F}(m)$. If we can show that $\Pi_{\mathcal F}(m)$ grows slowly (polynomially, say), we get a useful bound.</p>
+
+      <h2>The trivial bound and why it's hopeless</h2>
+
+      <p>Use the always-true inequality $\Pi_{\mathcal F}(m) \le 2^m$:</p>
+
+      <p>$$ \mathfrak R_m(\mathcal F) \le \sqrt{\frac{2\ln 2^m}{m}} = \sqrt{2\ln 2} \approx 1.18. $$</p>
+
+      <p>This is independent of $m$ — it does not decay. We could collect a million more samples and the bound would not shrink at all. That contradicts our intuition (and our experience) that more data improves generalisation.</p>
+
+      <div class="callout callout-warn">
+        <div class="callout-label">What this is telling us</div>
+        <p>The $2^m$ bound is the right answer for classes that <em>can</em> realise every possible labelling on $m$ points, like a class with infinite VC dimension. For such classes, generalisation is genuinely impossible without additional structure. For everyone else, we need a way to argue that $\Pi_{\mathcal F}(m)$ is much smaller than $2^m$ — and the next two chapters do exactly that.</p>
+      </div>
+
+      <h2>What "much smaller than 2<sup>m</sup>" needs to mean</h2>
+
+      <p>How fast can $\Pi_{\mathcal F}(m)$ grow before our bound becomes vacuous? Suppose $\Pi_{\mathcal F}(m) \le m^d$ for some constant $d$. Then</p>
+
+      <p>$$ \mathfrak R_m(\mathcal F) \le \sqrt{\frac{2\ln m^d}{m}} = \sqrt{\frac{2 d \ln m}{m}} \;\to\; 0\ \text{as}\ m\to\infty. $$</p>
+
+      <p>So polynomial growth is enough. And remarkably, classes that fail to shatter sets beyond a certain size always have polynomial growth — that is the content of Sauer's lemma, coming up.</p>
+
+      <h2>The dichotomy</h2>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="200" x2="500" y2="200" stroke="#5a6478"/>
+          <line x1="60" y1="200" x2="60"  y2="20"  stroke="#5a6478"/>
+          <text x="280" y="225" text-anchor="middle" fill="#5a6478" font-size="13">$m$ (sample size)</text>
+          <text x="22" y="120" fill="#5a6478" font-size="13" transform="rotate(-90 22 120)">$\Pi_{\mathcal F}(m)$</text>
+
+          <!-- exponential 2^m: blow up -->
+          <path d="M 70,195 C 130,180 180,140 230,80 C 260,50 290,30 320,25" stroke="#D2196E" stroke-width="3" fill="none"/>
+          <text x="280" y="20" fill="#D2196E" font-size="13" font-weight="bold">$2^m$ (infinite VC)</text>
+
+          <!-- polynomial m^d -->
+          <path d="M 70,195 Q 200,180 350,150 T 500,120" stroke="#0F2350" stroke-width="3" fill="none"/>
+          <text x="450" y="115" fill="#0F2350" font-size="13" font-weight="bold">$m^d$ (finite VC)</text>
+        </svg>
+        <div class="diagram-caption">Sauer's lemma will tell us that growth functions exhibit only two behaviours: full exponential $2^m$ (when VC dim is infinite) or polynomial $\sim m^d$ (when VC dim is $d$). Nothing in between.</div>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>We need a structural property of $\mathcal F$ that forces $\Pi_{\mathcal F}(m)$ to be polynomial. The right one is the <em>VC dimension</em>: the largest sample size on which the class can still produce all $2^m$ labellings. After we've defined it, Sauer's lemma will deliver the polynomial bound.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>
