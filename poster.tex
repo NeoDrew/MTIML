@@ -1,7 +1,13 @@
 \documentclass[20pt,a0paper,landscape,
   margin=0mm,innermargin=12mm,
-  blockverticalspace=7mm,
-  colspace=11mm,subcolspace=6mm]{tikzposter}
+  blockverticalspace=10mm,
+  colspace=12mm,subcolspace=6mm]{tikzposter}
+
+% Shrink the page height to ~16:9 so content fills.
+% Keep tikzposter's a0paper-landscape width (1189mm) so its column
+% layout is unchanged; just trim the unused vertical space.
+\setlength{\pdfpageheight}{669mm}
+\setlength{\paperheight}{669mm}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -18,7 +24,8 @@
 
 \definecolor{posterNavy}{RGB}{15,35,80}
 \definecolor{posterMagenta}{RGB}{210,25,110}
-\definecolor{posterPinkLight}{RGB}{255,241,248}
+\definecolor{posterTeal}{RGB}{0,140,140}
+\definecolor{posterTealLight}{RGB}{225,245,243}
 \definecolor{posterGrey}{RGB}{245,245,245}
 \definecolor{posterGreen}{RGB}{0,120,110}
 \definecolor{posterOrange}{RGB}{230,130,30}
@@ -113,7 +120,7 @@
 \newcommand{\smallbox}[1]{%
   \begin{center}%
   \begin{tikzpicture}
-    \node[draw=posterMagenta,line width=1pt,fill=posterPinkLight,rounded corners=8pt,
+    \node[draw=posterTeal,line width=1pt,fill=posterTealLight,rounded corners=8pt,
           inner sep=10pt,text width=0.86\linewidth,align=center]
       {#1};
   \end{tikzpicture}%
@@ -133,6 +140,10 @@
 
 \begin{document}
 \maketitle[width=\paperwidth,titletotopverticalspace=0mm,titletoblockverticalspace=5mm]
+
+% modest body bump (since a0size.sty for 25pt isn't installed)
+\renewcommand{\normalsize}{\fontsize{22pt}{27pt}\selectfont}
+\normalsize
 
 
 
@@ -325,7 +336,7 @@ The \textbf{VC dimension} is
 \]
 
 \begin{center}
-\begin{tikzpicture}[scale=0.70]
+\begin{tikzpicture}[scale=0.52]
   \begin{scope}[xshift=0cm]
     \fill[posterNavy] (0,0) circle (4pt); \fill[posterNavy] (1,0) circle (4pt);
     \node[above] at (0,0) {\scriptsize $+1$}; \node[above] at (1,0) {\scriptsize $+1$};
@@ -408,13 +419,6 @@ Therefore,
 \sqrt{\frac{d\ln(em/d)}{m}}.
 }
 \]
-
-\miniheadline{Interpretation.}
-\begin{itemize}
-\item Larger VC dimension $d$ means a richer class.
-\item Larger sample size $m$ improves generalisation.
-\item Finite VC dimension gives uniform convergence.
-\end{itemize}
 }
 
 \block{11. Takeaway and References}{
@@ -425,10 +429,10 @@ Therefore,
 \vspace{0.2em}
 \begin{center}
 \begin{tikzpicture}[node distance=0.55cm,scale=0.78,transform shape]
-  \node[draw,rounded corners,fill=posterPinkLight,minimum width=3.2cm] (gap) {gap};
-  \node[draw,rounded corners,fill=posterPinkLight,minimum width=3.2cm,right=of gap] (rad) {Rademacher};
-  \node[draw,rounded corners,fill=posterPinkLight,minimum width=3.2cm,right=of rad] (growth) {growth};
-  \node[draw,rounded corners,fill=posterPinkLight,minimum width=3.2cm,right=of growth] (vc) {VC dim};
+  \node[draw,rounded corners,fill=posterTealLight,minimum width=3.2cm] (gap) {gap};
+  \node[draw,rounded corners,fill=posterTealLight,minimum width=3.2cm,right=of gap] (rad) {Rademacher};
+  \node[draw,rounded corners,fill=posterTealLight,minimum width=3.2cm,right=of rad] (growth) {growth};
+  \node[draw,rounded corners,fill=posterTealLight,minimum width=3.2cm,right=of growth] (vc) {VC dim};
   \draw[-{Latex[length=3mm]},thick] (gap)--(rad);
   \draw[-{Latex[length=3mm]},thick] (rad)--(growth);
   \draw[-{Latex[length=3mm]},thick] (growth)--(vc);
