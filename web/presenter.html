@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drew's sections (Intro, 1, 2) · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<style>
+  .script-block {
+    background: white;
+    border-left: 4px solid var(--magenta);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 18px 0;
+    box-shadow: var(--shadow);
+  }
+  .script-block .cue {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--magenta);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .script-block p {
+    margin: 8px 0;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .script-block .stage {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 10px;
+  }
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0;
+    background: var(--bg-top);
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .timeline-row {
+    display: flex;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-time {
+    flex: 0 0 90px;
+    font-variant-numeric: tabular-nums;
+    color: var(--magenta);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .timeline-what {
+    flex: 1;
+    font-size: 14.5px;
+  }
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">★ Drew's presenter view</div>
+      <h1>Drew's sections — Intro, §1, §2</h1>
+      <p class="subtitle">A 5-minute spoken script for the opening of the poster, plus deep notes and Q&amp;A.</p>
+    </header>
+
+    <article>
+
+      <div class="callout callout-presenter">
+        <div class="callout-label">For the presentation</div>
+        <p>You're opening the poster. Your job: get the marker oriented (what the question is, why it matters), define the central object (Rademacher complexity), and hand off to Jay with a clean line. Total target: <strong>4½–5 minutes</strong>. Anything over 5½ eats into the rest of the team's time.</p>
+      </div>
+
+      <h2>Time budget</h2>
+
+      <div class="timeline">
+        <div class="timeline-row"><span class="timeline-time">0:00–0:30</span><span class="timeline-what"><strong>Introduction.</strong> Set up the question; preview the chain.</span></div>
+        <div class="timeline-row"><span class="timeline-time">0:30–2:00</span><span class="timeline-what"><strong>§1 Motivation.</strong> Empirical vs population risk; the supremum gap; the underfit–overfit picture.</span></div>
+        <div class="timeline-row"><span class="timeline-time">2:00–4:30</span><span class="timeline-what"><strong>§2 Rademacher.</strong> Definition, intuition, symmetrisation as the bridge.</span></div>
+        <div class="timeline-row"><span class="timeline-time">4:30–5:00</span><span class="timeline-what"><strong>Hand-off.</strong> One sentence to plant Jay's section.</span></div>
+      </div>
+
+      <h2>The script</h2>
+
+      <h3 id="intro">Introduction (≈ 30 sec)</h3>
+
+      <div class="script-block">
+        <div class="cue">Opening</div>
+        <p>"A central question in machine learning is: when can we trust that a model's training accuracy reflects its real-world performance? Statistical learning theory answers this by bounding the <em>generalisation gap</em> — the difference between empirical risk and population risk — uniformly across the entire hypothesis class.</p>
+        <p>Our poster traces a classical chain of results showing that, for binary classifiers, this gap is controlled by a single combinatorial parameter: the Vapnik–Chervonenkis dimension. The chain runs through Rademacher complexity, the growth function, Massart's lemma, and Sauer's lemma."</p>
+        <div class="stage">Gesture toward the title and the chain diagram if visible. Don't dwell — this is just orientation.</div>
+      </div>
+
+      <h3 id="sec1">Section 1: Motivation (≈ 1½ min)</h3>
+
+      <div class="script-block">
+        <div class="cue">Definitions</div>
+        <p>"Formally, the empirical risk $\widehat R(f)$ is the average loss on a training sample of size $m$. The population risk $R(f)$ is the expected loss over the unknown data distribution. The empirical risk we can compute. The population risk we cannot — but it's the one we care about."</p>
+        <div class="stage">Point to the two formulas. Pause briefly so the marker can read them.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="cue">The gap</div>
+        <p>"The generalisation gap is the difference $\widehat R(f) - R(f)$. Now: ERM picks the function in the class with the smallest empirical risk, so the function we end up with depends on the sample. To say anything about the function we picked, we need a bound that holds <em>uniformly</em> over every function in the class — that is, we need to control the supremum of the gap over $\mathcal F$."</p>
+        <div class="stage">Tap the supremum expression. The "uniformly" word matters — markers test for this.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="cue">The picture</div>
+        <p>"This is the classical underfit–overfit picture. As class complexity grows, training error monotonically falls. But test error first falls, then rises. The vertical gap between the two curves is exactly what we will bound. The objective is to ensure empirical risk approximates true risk uniformly over $\mathcal F$, ideally with a bound that depends on $\mathcal F$ only through some manageable structural quantity."</p>
+        <div class="stage">Point to the diagram. Keep this part fast — most markers know the picture.</div>
+      </div>
+
+      <h3 id="sec2">Section 2: Rademacher complexity (≈ 2½ min)</h3>
+
+      <div class="script-block">
+        <div class="cue">Setup</div>
+        <p>"To bound that supremum, we introduce <em>Rademacher complexity</em>. Let $\varepsilon_1, \dots, \varepsilon_m$ be independent Rademacher variables — random ±1 with equal probability. The empirical Rademacher complexity of a class $\mathcal H$ is defined as the expected value, over the noise, of the supremum over $\mathcal H$ of the average of $\varepsilon_i \cdot h(z_i)$. Then we average over samples to get the population Rademacher complexity."</p>
+        <div class="stage">Walk through the formula with your finger if helpful. The marker doesn't need to read it carefully — they need to hear what it represents.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="cue">Interpretation — this is the key idea</div>
+        <p>"Read this as a correlation. The inner sum $\frac{1}{m}\sum \varepsilon_i h(z_i)$ measures how well a function $h$ aligns with a string of pure ±1 noise. The supremum picks the single $h$ in the class that lines up best. So Rademacher complexity captures: <em>how well can the best function in my class fit pure noise on a typical sample?</em></p>
+        <p>If some $h$ in the class can hit high correlation on average, the class is too rich — it can fit anything, including noise, and won't generalise. Small Rademacher complexity means the class is constrained enough that no member can chase noise — exactly the property we want."</p>
+        <div class="stage">This is the most important point in your sections. Slow down. Make eye contact.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="cue">Symmetrisation — the bridge</div>
+        <p>"The reason Rademacher complexity is useful is the following symmetrisation theorem: the expected uniform deviation between empirical and population means is bounded by twice the Rademacher complexity.</p>
+        <p>The proof idea is the <em>ghost sample</em> argument. Introduce an independent copy of the sample, replace the unknown population mean by an empirical mean on that ghost sample, and use the symmetry between the two i.i.d. samples to inject ±1 random signs without changing anything. That gives the Rademacher form, with a factor of two from a triangle-inequality split."</p>
+        <div class="stage">Don't go through the proof. Just say "ghost sample, swap, signs, factor of two" if asked.</div>
+      </div>
+
+      <div class="script-block">
+        <div class="cue">Plant the flag</div>
+        <p>"So the entire question — bounding the worst-case generalisation gap — reduces to bounding $\mathfrak R_m(\mathcal F)$. Everything that follows is dedicated to that bound."</p>
+        <div class="stage">Pause. Then the hand-off.</div>
+      </div>
+
+      <h3>Hand-off (≈ 15 sec)</h3>
+
+      <div class="script-block">
+        <div class="cue">Transition to Jay</div>
+        <p>"Jay will now show how, for binary classifiers, the Rademacher complexity reduces to a finite combinatorial quantity — the growth function — via Massart's lemma."</p>
+        <div class="stage">Step aside; let Jay take the floor.</div>
+      </div>
+
+      <h2>Things to know cold</h2>
+
+      <p>If asked any of these, you should answer instantly:</p>
+
+      <ul>
+        <li><strong>What is the empirical risk?</strong> The average loss on a training sample.</li>
+        <li><strong>What is the population risk?</strong> The expected loss over the unknown data distribution.</li>
+        <li><strong>Why uniform convergence?</strong> Because ERM picks the function based on the sample, so a per-function bound says nothing about the actual learnt function.</li>
+        <li><strong>What is a Rademacher variable?</strong> A random variable taking values $+1$ or $-1$ each with probability $1/2$, independent of everything else.</li>
+        <li><strong>What does Rademacher complexity measure?</strong> How well the best function in the class can fit pure ±1 noise on a typical sample.</li>
+        <li><strong>What's the bound it gives?</strong> $\mathbb E_S[\sup_h(\widehat R - R)] \le 2 \mathfrak R_m(\mathcal H)$.</li>
+        <li><strong>Where does the factor of 2 come from?</strong> Splitting $\sup_h(a - b) \le \sup_h a + \sup_h b$ after the ghost-sample step.</li>
+      </ul>
+
+      <h2>Likely Q&amp;A on your sections</h2>
+
+      <ol>
+        <li><strong>"Why use ±1 random signs and not Gaussian noise?"</strong> Either works — Gaussian gives <em>Gaussian complexity</em>, a related quantity. Rademacher is sharper for $\pm 1$-valued classes and pairs naturally with the symmetrisation argument, which only uses the symmetry of differences of i.i.d. variables under sign flips.</li>
+        <li><strong>"What range can Rademacher complexity take?"</strong> For classes with $h(z) \in [-1, 1]$, it's in $[0, 1]$. Zero for trivial classes (e.g. constant functions, after centring). Larger when the class is rich.</li>
+        <li><strong>"What's the difference between empirical and population Rademacher complexity?"</strong> Empirical conditions on a fixed sample; population averages over samples. The two are close by concentration. Empirical is what you can <em>estimate</em>; population is what appears in the bound.</li>
+        <li><strong>"Why does the symmetrisation use a ghost sample?"</strong> To replace the unknown population mean $\mathbb E[h]$ with an observable quantity — an empirical mean on an i.i.d. copy — so we can analyse the difference of two empirical means, which is symmetric under sign flips.</li>
+        <li><strong>"Can the symmetrisation be tight?"</strong> The factor of 2 can be improved in some cases (down to 1 with extra structure) but in general it's the right order. The key point is that the gap and Rademacher complexity scale the same way in $m$ and $\mathcal F$.</li>
+        <li><strong>"Why bound the supremum and not the average?"</strong> ERM doesn't pick an "average" function; it picks the best-on-training-data one. The supremum captures the worst case ERM could plausibly land on.</li>
+        <li><strong>"Does this need bounded loss?"</strong> Yes, for the standard versions. Unbounded losses require additional moment assumptions.</li>
+      </ol>
+
+      <h2>Deeper-than-poster understanding (in case you're pushed)</h2>
+
+      <p>If the marker asks "what's the formal relationship between Rademacher and the generalisation gap?", here it is in full:</p>
+
+      <p>By symmetrisation,</p>
+      <pre>E_S [ sup_f ( Rhat(f) - R(f) ) ]  <=  2 * Rad_m(loss-class),</pre>
+      <p>where <em>loss-class</em> means the set of functions $z \mapsto \ell(y, f(x))$ as $f$ ranges over $\mathcal F$. For 0–1 loss and binary classifiers, a separate identity (Lemma 1.1 of Lecture 10) gives</p>
+      <pre>Rad_m(loss-class)  =  (1/2) * Rad_m(F),</pre>
+      <p>so combining, the generalisation gap is bounded by $\mathfrak R_m(\mathcal F)$ itself, no factor of 2. That's the version Jay will use.</p>
+
+      <p>The upgrade from "in expectation" to "with high probability" comes from McDiarmid's inequality applied to the supremum, which adds a $\sqrt{\ln(1/\delta)/(2m)}$ term. Don't go into this unless asked — it's strictly more advanced than the poster.</p>
+
+      <h2>Linked chapters with full proofs</h2>
+
+      <p><a href="01-motivation.html">§1 Motivation</a> · <a href="02-rademacher.html">§2 Rademacher complexity</a></p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

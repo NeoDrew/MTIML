@@ -1,19 +1,20 @@
 // Single source of truth for the chapter list.
 // Used by every page to render the sidebar and prev/next nav.
+// Section numbers (1–8) match the poster sections exactly.
 
 const CHAPTERS = [
-  { href: "index.html",                num: "0",  title: "Overview",            short: "Start here" },
-  { href: "01-risk.html",              num: "1",  title: "Risk & generalisation", short: "Why training error isn't enough" },
-  { href: "02-rademacher.html",        num: "2",  title: "Rademacher complexity", short: "Can the class fit noise?" },
-  { href: "03-symmetrisation.html",    num: "3",  title: "Symmetrisation",       short: "Master theorem & ghost samples" },
-  { href: "04-growth-function.html",   num: "4",  title: "Growth function",      short: "From functions to label vectors" },
-  { href: "05-massart.html",           num: "5",  title: "Massart's lemma",      short: "Finite vectors → Rademacher bound" },
-  { href: "06-rademacher-bound.html",  num: "6",  title: "Rademacher ≤ growth",  short: "Theorem 1.1" },
-  { href: "07-vc-dimension.html",      num: "7",  title: "VC dimension",         short: "Shattering and examples" },
-  { href: "08-halfspaces-radon.html",  num: "8",  title: "Halfspaces & Radon",   short: "VCdim of halfspaces is d+1" },
-  { href: "09-sauer.html",             num: "9",  title: "Sauer's lemma",        short: "VC controls growth" },
-  { href: "10-final.html",             num: "10", title: "The final chain",      short: "VC ⇒ uniform convergence" },
-  { href: "11-cheatsheet.html",        num: "11", title: "Cheat-sheet & Q&A",    short: "Recall fast" },
+  { href: "index.html",            num: "0",  title: "Overview",                short: "Start here" },
+  { href: "definitions.html",      num: "·",  title: "Definitions",             short: "Hypothesis class, halfspace, VC, etc." },
+  { href: "presenter.html",        num: "★",  title: "Drew's sections",         short: "Intro, §1 motivation, §2 Rademacher — with script", presenter: true },
+  { href: "01-motivation.html",    num: "1",  title: "Motivation",              short: "The generalisation gap" },
+  { href: "02-rademacher.html",    num: "2",  title: "Rademacher complexity",   short: "Symmetrisation; can the class fit noise?" },
+  { href: "03-label-vectors.html", num: "3",  title: "From functions to labels", short: "Restriction & growth function" },
+  { href: "04-massart.html",       num: "4",  title: "Massart's lemma",         short: "Finite vectors → Rademacher bound" },
+  { href: "05-vc-dimension.html",  num: "5",  title: "VC dimension",            short: "Shattering, halfspaces, Radon" },
+  { href: "06-sauer.html",         num: "6",  title: "Sauer's lemma",           short: "VC controls growth" },
+  { href: "07-generalisation.html",num: "7",  title: "VC ⇒ generalisation",     short: "Composing the chain" },
+  { href: "08-discussion.html",    num: "8",  title: "Discussion",              short: "Tightness, PAC, modern caveat" },
+  { href: "cheatsheet.html",       num: "·",  title: "Cheat-sheet & Q&A",       short: "Recall fast" },
 ];
 
 (function buildSidebar() {
@@ -22,8 +23,11 @@ const CHAPTERS = [
   if (!sidebar) return;
 
   const items = CHAPTERS.map(c => {
-    const active = c.href.toLowerCase() === here ? " active" : "";
-    return `<a class="${active.trim()}" href="${c.href}"><span class="num">${c.num}</span><span>${c.title}</span></a>`;
+    const cls = [];
+    if (c.href.toLowerCase() === here) cls.push("active");
+    if (c.presenter) cls.push("presenter-link");
+    const classAttr = cls.length ? ` class="${cls.join(" ")}"` : "";
+    return `<a${classAttr} href="${c.href}"><span class="num">${c.num}</span><span>${c.title}</span></a>`;
   }).join("");
 
   sidebar.innerHTML = `
@@ -34,7 +38,6 @@ const CHAPTERS = [
     <nav>${items}</nav>
   `;
 
-  // Build prev/next at bottom of page if .chapter-nav-slot exists
   const slot = document.getElementById("chapter-nav-slot");
   if (slot) {
     const idx = CHAPTERS.findIndex(c => c.href.toLowerCase() === here);

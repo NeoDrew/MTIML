@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. Motivation · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 1</div>
+      <h1>Motivation: The Generalisation Gap</h1>
+      <p class="subtitle">Why training error isn't enough.</p>
+    </header>
+
+    <article>
+
+      <div class="callout callout-presenter">
+        <div class="callout-label">★ Drew's section to present</div>
+        <p>This is one of Drew's three sections (Intro + §1 + §2). The <a href="presenter.html">presenter view</a> has the spoken script.</p>
+      </div>
+
+      <h2>Empirical risk vs population risk</h2>
+
+      <p>Statistical learning theory addresses the discrepancy between <em>empirical risk</em>, observed on training data, and <em>population risk</em>, which governs out-of-sample performance:
+      $$\widehat R(f) = \frac{1}{m}\sum_{i=1}^m \ell(y_i, f(x_i)),\qquad R(f) = \mathbb E[\ell(y, f(x))].$$
+      The empirical risk is computable from the sample. The population risk is not — it depends on the unknown data distribution $D$. The whole game is to use the former as a proxy for the latter.</p>
+
+      <h2>The generalisation gap</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The <em>generalisation gap</em> for a fixed $f$ is $\Delta_f = \widehat R(f) - R(f)$. Since $f$ is selected from $\mathcal F$ on the basis of the sample, the relevant quantity is the worst-case gap over the class:
+        $$\sup_{f \in \mathcal F}\bigl(\widehat R(f) - R(f)\bigr).$$
+        A uniform bound on this supremum underpins distribution-free generalisation guarantees.</p>
+      </div>
+
+      <p>Why "uniform"? If you only know $\widehat R(f) \approx R(f)$ for a single fixed $f$, you can't say anything about the $f$ your algorithm chose after looking at the data. Empirical risk minimisation (ERM) returns a function that depends on the sample, so we need the bound to hold simultaneously over <em>every</em> $f \in \mathcal F$.</p>
+
+      <h2>The picture</h2>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="220" x2="500" y2="220" stroke="#5a6478" stroke-width="1.5"/>
+          <line x1="60" y1="220" x2="60"  y2="20"  stroke="#5a6478" stroke-width="1.5"/>
+          <text x="280" y="250" text-anchor="middle" fill="#5a6478" font-size="13">model complexity</text>
+          <text x="22"  y="120" fill="#5a6478" font-size="13" transform="rotate(-90 22 120)">error</text>
+          <path d="M 80,80 C 180,170 300,200 480,212" stroke="#0F2350" stroke-width="3" fill="none"/>
+          <path d="M 80,90 C 180,150 270,140 360,150 C 420,158 460,135 490,80" stroke="#D2196E" stroke-width="3" fill="none"/>
+          <text x="490" y="208" fill="#0F2350" font-size="12" text-anchor="end">training</text>
+          <text x="490" y="68"  fill="#D2196E" font-size="12" text-anchor="end">test</text>
+          <text x="100" y="245" fill="#5a6478" font-size="11">underfit</text>
+          <text x="450" y="245" fill="#5a6478" font-size="11" text-anchor="end">overfit</text>
+        </svg>
+        <div class="diagram-caption">A class that's too small can't fit the data; a class that's too large memorises it. The vertical gap between the curves is what we will bound.</div>
+      </div>
+
+      <h2>The driving question</h2>
+
+      <div class="callout callout-key">
+        <div class="callout-label">Goal</div>
+        <p>The objective is to ensure empirical risk approximates true risk uniformly over $\mathcal F$. That is, find a bound on
+        $$\mathbb E_S\!\left[\sup_{f \in \mathcal F}\bigl(\widehat R(f) - R(f)\bigr)\right]$$
+        that goes to $0$ as $m \to \infty$, and that depends on $\mathcal F$ only through some manageable structural quantity.</p>
+      </div>
+
+      <p>The next sections show that the "manageable structural quantity" turns out to be the VC dimension, and that the route from there back to the generalisation gap passes through Rademacher complexity, the growth function, and Massart's and Sauer's lemmas.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5. VC Dimension · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 5</div>
+      <h1>VC Dimension</h1>
+      <p class="subtitle">Shattering, definition, examples, and the halfspace bound.</p>
+    </header>
+
+    <article>
+
+      <h2>Shattering and VC dimension</h2>
+
+      <p>A set $\{x_1, \dots, x_m\}$ is <em>shattered</em> by $\mathcal F$ if
+      $$\mathcal F\big|_{x_1^m} = \{\pm 1\}^m,$$
+      that is, every binary labelling is realised by some $f \in \mathcal F$.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Vapnik–Chervonenkis dimension</div>
+        <p>The supremum of cardinalities shattered by $\mathcal F$:
+        $$\mathrm{VCdim}(\mathcal F) \;=\; \sup\{m : \Pi_{\mathcal F}(m) = 2^m\}.$$
+        If $\mathcal F$ shatters arbitrarily large sets, $\mathrm{VCdim}(\mathcal F) = \infty$.</p>
+      </div>
+
+      <h2>Examples</h2>
+
+      <table class="examples">
+        <thead><tr><th>$\mathcal X$</th><th>$\mathcal F$</th><th>$\mathrm{VCdim}(\mathcal F)$</th></tr></thead>
+        <tbody>
+          <tr><td>$\mathbb R^2$</td><td>convex polygons</td><td>$\infty$</td></tr>
+          <tr><td>$\mathbb R^2$</td><td>axis-aligned rectangles</td><td>$4$</td></tr>
+          <tr><td>$\mathbb R^2$</td><td>convex polygons with $d$ vertices</td><td>$2d + 1$</td></tr>
+          <tr><td>$\mathbb R^d$</td><td>halfspaces</td><td>$d + 1$</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Halfspaces in $\mathbb R^d$</h2>
+
+      <p>Define $\mathcal F = \{x \mapsto \mathrm{sgn}(w \cdot x - \theta) : w \in \mathbb R^d, \theta \in \mathbb R\}$. We claim $\mathrm{VCdim}(\mathcal F) = d + 1$.</p>
+
+      <h3>Lower bound: shatter $\{\mathbf 0, e_1, \dots, e_d\}$</h3>
+
+      <div class="proof">
+        <span class="proof-label">Proof of lower bound.</span>
+        <p>Take the $d+1$ points $X = \{\mathbf 0, e_1, \dots, e_d\}$. Given any labelling $(b_0, b_1, \dots, b_d) \in \{\pm 1\}^{d+1}$, set
+        $$\theta = -b_0,\qquad w_i = \theta + b_i.$$
+        Check: $w \cdot \mathbf 0 - \theta = -\theta = b_0$, and $w \cdot e_i - \theta = w_i - \theta = b_i$. Every labelling is realised, so $X$ is shattered.</p>
+        <p class="proof-end">$\mathrm{VCdim}(\mathcal F) \ge d + 1.$</p>
+      </div>
+
+      <h3>Upper bound: Radon's lemma</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Radon's lemma</div>
+        <p>Any $d + 2$ points in $\mathbb R^d$ admit a partition $X_1, X_2$ with
+        $$\mathrm{conv}(X_1) \cap \mathrm{conv}(X_2) \ne \emptyset.$$</p>
+      </div>
+
+      <p>The labelling assigning $+1$ to $X_1$ and $-1$ to $X_2$ then cannot be realised by any halfspace, since a halfspace assigning a label to a set assigns the same label to its convex hull — both sides would force the intersection point to receive opposite labels.</p>
+
+      <div class="proof">
+        <span class="proof-label">Proof of Radon's lemma.</span>
+        <p>For $X = \{x_1, \dots, x_{d+2}\}$, consider the system of $d+1$ equations in $d+2$ unknowns:
+        $$\sum_{i=1}^{d+2} \lambda_i x_i = \mathbf 0,\qquad \sum_{i=1}^{d+2} \lambda_i = 0.$$
+        Underdetermined ⇒ a non-trivial solution $\lambda^* \ne 0$ exists. Let $P = \{i : \lambda^*_i > 0\}$, $N = \{j : \lambda^*_j < 0\}$. Both are non-empty (since $\sum \lambda^*_i = 0$).</p>
+        <p>The point
+        $$z \;=\; \frac{\sum_{i\in P}\lambda^*_i x_i}{\sum_{i\in P}\lambda^*_i} \;=\; \frac{\sum_{j\in N}(-\lambda^*_j) x_j}{\sum_{j\in N}(-\lambda^*_j)}$$
+        is a convex combination of both $X_1 = \{x_i : i \in P\}$ and $X_2 = \{x_j : j \in N\}$, so it lies in both convex hulls.</p>
+        <p class="proof-end"></p>
+      </div>
+
+      <div class="diagram">
+        <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="60,170 230,150 300,40 130,30" fill="rgba(255,170,60,0.10)" stroke="#FFAA3C" stroke-width="1" stroke-dasharray="3 4"/>
+          <line x1="60"  y1="170" x2="300" y2="40"  stroke="#0F2350" stroke-width="1.5" opacity="0.5"/>
+          <line x1="230" y1="150" x2="130" y2="30"  stroke="#D2196E" stroke-width="1.5" opacity="0.5"/>
+          <g fill="#0F2350"><circle cx="60" cy="170" r="6"/><circle cx="300" cy="40" r="6"/></g>
+          <g fill="#D2196E"><circle cx="230" cy="150" r="6"/><circle cx="130" cy="30" r="6"/></g>
+          <circle cx="180" cy="100" r="5" fill="#FFAA3C" stroke="#b67100" stroke-width="1.5"/>
+          <text x="180" y="118" text-anchor="middle" fill="#b67100" font-size="12">in both convex hulls</text>
+        </svg>
+        <div class="diagram-caption">Four points in $\mathbb R^2$: Radon's lemma guarantees a partition whose convex hulls intersect.</div>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>We now have a definition of VC dimension and one worked example (halfspaces, with VCdim $=d+1$). The next section delivers the structural punchline: <em>finite VC dim forces polynomial growth of $\Pi_{\mathcal F}$</em>. That's Sauer's lemma.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

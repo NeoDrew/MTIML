@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8. Discussion · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 8</div>
+      <h1>Discussion</h1>
+      <p class="subtitle">Tightness, scope, the dichotomy, PAC learning, modern caveats.</p>
+    </header>
+
+    <article>
+
+      <h2>Tightness</h2>
+
+      <p>The $\sqrt{\log m / m}$ rate retains a logarithmic factor that more refined techniques can remove. <em>Chaining</em> and Dudley's entropy integral yield bounds of the form
+      $$\mathfrak R_m(\mathcal F) = O\!\left(\sqrt{d/m}\right)$$
+      without the log factor. The bound is also distribution-free; data-dependent variants based on the empirical Rademacher complexity are typically tighter in practice.</p>
+
+      <h2>Scope</h2>
+
+      <p>The reduction relies on $\|a\|_2 = \sqrt m$, which exploits the binary structure $\mathcal F \subseteq \{\pm 1\}^{\mathcal X}$. Real-valued classes require alternative complexity measures: the <em>pseudo-dimension</em> and the <em>fat-shattering dimension</em> generalise the framework to such settings.</p>
+
+      <h2>The dichotomy</h2>
+
+      <p>Sauer's Lemma reveals that growth functions exhibit only two regimes: <em>exponential</em> when $\mathrm{VCdim}(\mathcal F) = \infty$, and <em>eventually polynomial</em> when $\mathrm{VCdim}(\mathcal F) < \infty$. No intermediate growth rate is possible — a structurally striking feature of binary hypothesis classes.</p>
+
+      <h2>Connection to PAC learning</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Fundamental theorem of statistical learning</div>
+        <p>A class is PAC-learnable if and only if it has finite VC dimension, with sample complexity
+        $$O\!\left(\frac{d}{\varepsilon^2}\,\log\frac{1}{\delta}\right).$$</p>
+      </div>
+
+      <p>VC theory thus characterises learnability itself, not merely a sufficient condition. The "if" direction is what we proved (finite VC ⇒ uniform convergence ⇒ PAC learnable). The "only if" direction is the harder half — the <em>no-free-lunch</em> argument shows that infinite VC dim implies no algorithm can succeed in the worst case.</p>
+
+      <h2>Modern caveat</h2>
+
+      <p>Deep neural networks possess effectively unbounded VC dimension yet generalise well in practice. Classical VC theory does not predict this behaviour, motivating:</p>
+
+      <ul>
+        <li><em>Margin-based bounds</em> — replace VC dim with a continuous margin parameter that captures the geometry of the data.</li>
+        <li><em>PAC-Bayes analysis</em> (Dziugaite &amp; Roy, 2017) — combine the prior knowledge with posterior concentration.</li>
+        <li><em>Implicit regularisation</em> and the <em>neural tangent kernel</em> — reason about what SGD actually finds, not what could be found.</li>
+        <li><em>Algorithmic stability</em> — bound generalisation through algorithm sensitivity rather than class capacity.</li>
+      </ul>
+
+      <p>None of this diminishes the foundational character of the VC bound. It is the canonical distribution-free, algorithm-agnostic guarantee — every modern theory is benchmarked against it.</p>
+
+      <h2>References</h2>
+
+      <ul>
+        <li>V. Vapnik and A. Chervonenkis. <em>On the uniform convergence of relative frequencies of events to their probabilities</em>. Theory of Probability and its Applications, 1971.</li>
+        <li>N. Sauer. <em>On the density of families of sets</em>. J. Combinatorial Theory A, 1972.</li>
+        <li>P. Massart. <em>Some applications of concentration inequalities to statistics</em>. Annales de la Faculté des Sciences de Toulouse, 2000.</li>
+        <li>P. Bartlett and S. Mendelson. <em>Rademacher and Gaussian complexities: risk bounds and structural results</em>. JMLR, 2002.</li>
+        <li>G. K. Dziugaite and D. M. Roy. <em>Computing nonvacuous generalization bounds for deep (stochastic) neural networks with many more parameters than training data</em>. UAI, 2017.</li>
+        <li>S. Kakade and A. Tewari. <em>Lecture notes on learning theory</em>. CMSC 35900, 2008.</li>
+      </ul>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

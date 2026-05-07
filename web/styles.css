@@ -281,6 +281,34 @@ article pre code {
 }
 .callout-key .callout-label { color: #0e7d63; }
 
+.callout-presenter {
+  border-left-color: var(--magenta);
+  background:
+    linear-gradient(90deg, rgba(210,25,110,0.10), rgba(255,170,60,0.10) 80%);
+  border: 1px solid rgba(210,25,110,0.25);
+}
+.callout-presenter .callout-label { color: var(--magenta); }
+
+.sidebar nav a.presenter-link {
+  background: rgba(255,170,60,0.10);
+  color: white;
+  font-weight: 600;
+}
+
+.sidebar nav a.presenter-link .num {
+  color: var(--amber);
+  font-size: 14px;
+}
+
+.sidebar nav a.presenter-link:hover {
+  background: rgba(255,170,60,0.18);
+}
+
+.sidebar nav a.presenter-link.active {
+  background: linear-gradient(90deg, rgba(255,170,60,0.25), rgba(210,25,110,0.18));
+  border-left-color: var(--amber);
+}
+
 .callout p:first-child { margin-top: 0; }
 .callout p:last-child { margin-bottom: 0; }
 

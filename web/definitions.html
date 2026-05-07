@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Definitions · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Definitions</div>
+      <h1>Definitions, in plain English</h1>
+      <p class="subtitle">The vocabulary of the field, with worked examples.</p>
+    </header>
+
+    <article>
+
+      <p>If a term in any chapter is fuzzy, look it up here. Each entry has the formal definition followed by one or two concrete examples.</p>
+
+      <h2>Hypothesis class</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>A <em>hypothesis class</em> $\mathcal F$ is a <strong>set of functions</strong> from inputs $\mathcal X$ to outputs $\mathcal Y$. Every function in the set is a candidate rule that your learning algorithm could possibly return.</p>
+      </div>
+
+      <p>Almost always specified as a <em>parametrised family</em> — pick parameters, get a function. Vary the parameters and you sweep out the whole class.</p>
+
+      <h3>Example 1: thresholds on the real line</h3>
+      <p>$$\mathcal F = \{\, x \mapsto \mathrm{sgn}(x - \theta) \;:\; \theta \in \mathbb R \,\}.$$
+      Each value of $\theta$ defines one function ("$+1$ to the right of $\theta$, $-1$ to the left"). The class is the whole continuous family of those functions, one per $\theta$.</p>
+
+      <h3>Example 2: linear classifiers (halfspaces) in $\mathbb R^d$</h3>
+      <p>$$\mathcal F = \{\, x \mapsto \mathrm{sgn}(w \cdot x - \theta) \;:\; w \in \mathbb R^d, \;\theta \in \mathbb R \,\}.$$
+      Parameters: $(w, \theta)$. Each choice gives a specific linear decision boundary. The class is every such linear classifier.</p>
+
+      <h3>Example 3: linear regression</h3>
+      <p>$$\mathcal F = \{\, x \mapsto w \cdot x + b \;:\; w \in \mathbb R^d, \;b \in \mathbb R \,\}.$$
+      Same flavour, real-valued output. Note the language collision: "linear regression" is also the name of the <em>algorithm</em> (least squares fit). The hypothesis class is the <em>set</em> of all linear functions; the algorithm is one recipe for picking one.</p>
+
+      <h3>Example 4: a neural network with fixed architecture</h3>
+      <p>Fix the layers, widths, and activations. Then
+      $$\mathcal F = \{\, x \mapsto \mathrm{NN}_\theta(x) \;:\; \theta \in \mathbb R^p \,\},$$
+      where $\theta$ is the vector of all $p$ weights and biases. Each setting of $\theta$ is one specific network. The class is every function you can realise by varying the weights with the architecture held fixed.</p>
+
+      <h3>Other common classes</h3>
+      <ul>
+        <li><strong>Polynomials of degree ≤ $k$:</strong> $\mathcal F = \{x \mapsto \sum_{i=0}^k a_i x^i : a_i \in \mathbb R\}$.</li>
+        <li><strong>Decision trees</strong> of depth ≤ $d$.</li>
+        <li><strong>$k$-nearest-neighbours</strong> classifiers (parametrised by which training points are stored).</li>
+        <li><strong>Constant functions:</strong> $\mathcal F = \{x \mapsto c : c \in \mathbb R\}$ — the smallest non-trivial class.</li>
+      </ul>
+
+      <div class="callout callout-intuition">
+        <div class="callout-label">Mental model</div>
+        <p>Picture a box. Inside the box: every linear classifier in $\mathbb R^2$, say. Each is one candidate rule. ERM is "look at the data, pick the function in the box with the highest training accuracy". Generalisation theory asks <em>when is that pick also good on new data?</em> Answer: depends on how big and wiggly the box is. VC dimension and Rademacher complexity are two ways of measuring "how big and wiggly".</p>
+      </div>
+
+      <h2>Loss function</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>A <em>loss function</em> $\ell : \mathcal Y \times \mathcal Y \to \mathbb R_{\ge 0}$ measures how badly a prediction $f(x)$ matches the true label $y$. Larger = worse.</p>
+      </div>
+
+      <ul>
+        <li><strong>0–1 loss</strong> (classification): $\ell(y, y') = \mathbf 1[y \ne y']$. Pays 1 for a wrong answer, 0 for right.</li>
+        <li><strong>Squared loss</strong> (regression): $\ell(y, y') = (y - y')^2$.</li>
+        <li><strong>Hinge loss</strong> (SVM-style): $\ell(y, y') = \max(0,\, 1 - y y')$ for $y \in \{\pm 1\}$.</li>
+      </ul>
+
+      <h2>Population risk vs empirical risk</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p><strong>Population risk:</strong>
+        $$R(f) = \mathbb E_{(x,y)\sim D}[\ell(y, f(x))]$$
+        — the loss you'd suffer in expectation over the true data distribution. You can't compute it because you don't know $D$.</p>
+        <p><strong>Empirical risk:</strong>
+        $$\widehat R(f) = \frac{1}{m}\sum_{i=1}^m \ell(y_i, f(x_i))$$
+        — the average loss on a finite training sample. You can compute this because you have the sample.</p>
+      </div>
+
+      <p>The whole game is to use $\widehat R(f)$ (computable) as a proxy for $R(f)$ (the thing you actually care about). The <em>generalisation gap</em> $\widehat R(f) - R(f)$ measures how good a proxy it is.</p>
+
+      <h2>ERM (Empirical Risk Minimisation)</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The learning recipe "pick the function in $\mathcal F$ that does best on the training sample":
+        $$\widehat f \in \arg\min_{f \in \mathcal F}\, \widehat R(f).$$</p>
+      </div>
+
+      <p>ERM is fine if $\widehat R(f) \approx R(f)$ uniformly across $\mathcal F$. If not, ERM overfits — it returns a function that looks great on the sample and bad in reality.</p>
+
+      <h2>i.i.d. sample</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>"Independent and identically distributed". A sample $(x_1, y_1), \dots, (x_m, y_m)$ is i.i.d. if each pair is drawn from the same distribution $D$ and the draws are independent of each other.</p>
+      </div>
+
+      <p>This is the standard assumption in statistical learning. Without it, symmetrisation and most concentration arguments break.</p>
+
+      <h2>Rademacher complexity</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>$$\mathfrak{R}_m(\mathcal H) = \mathbb E_{S, \varepsilon}\!\left[\,\sup_{h \in \mathcal H}\, \frac{1}{m}\sum_{i=1}^m \varepsilon_i\, h(z_i)\right]$$
+        where $\varepsilon_i \in \{\pm 1\}$ are i.i.d. Rademacher (50/50 random signs).</p>
+      </div>
+
+      <p><strong>Read it slowly:</strong></p>
+      <ul>
+        <li>$\frac{1}{m}\sum \varepsilon_i h(z_i)$ — the <em>correlation</em> between $h$'s outputs and a random sign pattern.</li>
+        <li>$\sup_h$ — pick the single $h$ that lines up best with this particular noise pattern.</li>
+        <li>$\mathbb E$ — average over fresh draws of both data and noise.</li>
+      </ul>
+
+      <p>So Rademacher complexity is the <strong>expected best-case alignment between a function in your class and pure ±1 noise</strong>. <em>It is not a count of functions.</em> The intuition "more functions ⇒ higher Rademacher" is only loosely correct; the actual count of label vectors lives in the growth function.</p>
+
+      <h2>Growth function</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The <em>growth function</em> at sample size $m$ is the worst-case number of distinct label vectors $\mathcal F$ can produce on any $m$ points:
+        $$\Pi_{\mathcal F}(m) = \max_{x_1, \dots, x_m \in \mathcal X}\, \bigl|\,\{(f(x_1), \dots, f(x_m)) : f \in \mathcal F\}\,\bigr|.$$</p>
+      </div>
+
+      <p>$\Pi_{\mathcal F}(m) \le 2^m$ always, since there are only $2^m$ possible $\pm 1$ label vectors of length $m$. The growth function is small when $\mathcal F$ is constrained: many functions in the class produce the same label vector on a fixed sample.</p>
+
+      <p><strong>Concrete example.</strong> Threshold class $\mathcal F = \{x \mapsto \mathrm{sgn}(x-\theta)\}$. On 2 points $x_1 < x_2$, only 3 label vectors are achievable: $(+,+), (-,+), (-,-)$. The vector $(+,-)$ is unrealisable — no threshold can be left of $x_1$ but right of $x_2$. So $\Pi_{\mathcal F}(2) = 3 < 2^2 = 4$.</p>
+
+      <h2>Shattering</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>A set $\{x_1, \dots, x_m\}$ is <em>shattered</em> by $\mathcal F$ if <strong>every</strong> $\pm 1$ labelling of those points is achievable by some $f \in \mathcal F$. Equivalently, $\Pi_{\mathcal F}(m)$ achieves its max value of $2^m$ on that particular set.</p>
+      </div>
+
+      <h2>VC dimension</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The <em>Vapnik–Chervonenkis dimension</em>:
+        $$\mathrm{VCdim}(\mathcal F) = \max\{m : \Pi_{\mathcal F}(m) = 2^m\}$$
+        — equivalently, the size of the largest set that $\mathcal F$ shatters. If $\mathcal F$ shatters arbitrarily large sets, $\mathrm{VCdim}(\mathcal F) = \infty$.</p>
+      </div>
+
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>Thresholds on $\mathbb R$: VCdim = 1.</li>
+        <li>Intervals on $\mathbb R$: VCdim = 2.</li>
+        <li>Axis-aligned rectangles in $\mathbb R^2$: VCdim = 4.</li>
+        <li>Halfspaces in $\mathbb R^d$: VCdim = $d+1$.</li>
+        <li>Convex polygons in $\mathbb R^2$ (no vertex limit): VCdim = $\infty$.</li>
+      </ul>
+
+      <h2>Halfspace</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>A <em>halfspace</em> classifier in $\mathbb R^d$ is the function
+        $$f_{w, \theta}(x) = \mathrm{sgn}(w \cdot x - \theta)$$
+        for $w \in \mathbb R^d$ and $\theta \in \mathbb R$. The decision boundary is the hyperplane $\{x : w \cdot x = \theta\}$; one side is labelled $+1$, the other $-1$.</p>
+      </div>
+
+      <ul>
+        <li>In 1D: halfspace = "everything to the right of $\theta$" (or left). A threshold.</li>
+        <li>In 2D: halfspace = "everything on one side of a line".</li>
+        <li>In 3D: "one side of a plane".</li>
+        <li>In $d$D: "one side of a hyperplane".</li>
+      </ul>
+
+      <p>Halfspaces are the canonical worked example for VC dim because their VC dim has a clean formula ($d+1$) and short proofs. They also model the perceptron, the linear SVM (without slack), and the decision boundary of logistic regression.</p>
+
+      <h2>Generalisation gap</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The <em>generalisation gap</em> for a fixed $f$ is $\widehat R(f) - R(f)$. The version that matters for ERM is the supremum over the class:
+        $$\sup_{f \in \mathcal F}\bigl(\widehat R(f) - R(f)\bigr).$$
+        Bounding this is the goal of uniform convergence theory.</p>
+      </div>
+
+      <h2>PAC learning</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>"Probably Approximately Correct". A class $\mathcal F$ is <em>PAC learnable</em> if there exists an algorithm that, given any $\varepsilon, \delta > 0$ and enough samples, returns a function with population risk at most $\varepsilon$ above the best in $\mathcal F$, with probability at least $1 - \delta$.</p>
+      </div>
+
+      <p>For binary classification, PAC learnability is equivalent to finite VC dimension — that's the <em>fundamental theorem of statistical learning</em>.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

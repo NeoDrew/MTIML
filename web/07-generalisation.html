@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7. From VC Dimension to Generalisation · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 7</div>
+      <h1>From VC Dimension to Generalisation</h1>
+      <p class="subtitle">Composing the chain.</p>
+    </header>
+
+    <article>
+
+      <h2>The composed bound</h2>
+
+      <p>Combining Massart's Lemma with Sauer's Lemma, for any binary class $\mathcal F$ with $\mathrm{VCdim}(\mathcal F) \le d$ and $m \ge d$:</p>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Generalisation bound</div>
+        <p>$$\mathfrak R_m(\mathcal F) \;\le\; \sqrt{\frac{2 \ln \Pi_{\mathcal F}(m)}{m}} \;\le\; \sqrt{\frac{2 d \ln(em/d)}{m}}.$$</p>
+      </div>
+
+      <h2>Dichotomy of growth</h2>
+
+      <p>If $\mathrm{VCdim}(\mathcal F) = \infty$, then $\Pi_{\mathcal F}(m) = 2^m$ for every $m$. Otherwise, Sauer's Lemma implies polynomial growth:
+      $$\Pi_{\mathcal F}(m) = O(m^d).$$
+      <strong>No intermediate growth rate occurs.</strong></p>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="220" x2="500" y2="220" stroke="#5a6478"/>
+          <line x1="60" y1="220" x2="60"  y2="20"  stroke="#5a6478"/>
+          <text x="280" y="245" text-anchor="middle" fill="#5a6478" font-size="13">$m$</text>
+          <text x="22" y="120" fill="#5a6478" font-size="13" transform="rotate(-90 22 120)">$\Pi_{\mathcal F}(m)$</text>
+          <path d="M 70,215 C 130,200 180,160 230,100 C 260,70 290,50 320,45" stroke="#D2196E" stroke-width="3" fill="none"/>
+          <text x="320" y="40" fill="#D2196E" font-size="13" font-weight="bold">$2^m$ (VCdim $=\infty$)</text>
+          <path d="M 70,215 Q 200,200 350,170 T 500,140" stroke="#0F2350" stroke-width="3" fill="none"/>
+          <text x="450" y="135" fill="#0F2350" font-size="13" font-weight="bold">$m^d$ (VCdim $&lt; \infty$)</text>
+        </svg>
+        <div class="diagram-caption">Two regimes only: full exponential or eventually polynomial. Nothing in between.</div>
+      </div>
+
+      <h2>Interpretation</h2>
+
+      <p>Finite VC dimension prevents the hypothesis class from sustaining exponential combinatorial growth.</p>
+
+      <h2>Consequence</h2>
+
+      <p>For $\mathrm{VCdim}(\mathcal F) = d < \infty$,
+      $$\mathfrak R_m(\mathcal F) \;=\; O\!\left(\sqrt{\frac{d \ln m}{m}}\right) \;\to\; 0\ \text{as}\ m \to \infty.$$
+      Consequently, the expected gap between empirical and true performance vanishes with more data.</p>
+
+      <h2>The whole chain in one image</h2>
+
+      <div class="chain">
+        <span class="chain-step">finite VC dimension</span>
+        <span class="chain-arrow">↓ Sauer</span>
+        <span class="chain-step">polynomial growth</span>
+        <span class="chain-arrow">↓ Massart</span>
+        <span class="chain-step">small Rademacher complexity</span>
+        <span class="chain-arrow">↓ symmetrisation</span>
+        <span class="chain-step">generalisation</span>
+      </div>
+
+      <div class="callout callout-key">
+        <div class="callout-label">The headline</div>
+        <p>Finite VC dimension, a purely combinatorial property, is sufficient to guarantee learnability independently of the underlying data distribution.</p>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>Section 8 closes with a discussion of the bound's tightness, scope, and how it relates to PAC learning and modern deep learning practice.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

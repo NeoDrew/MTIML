@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. From Functions to Label Vectors · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 3</div>
+      <h1>From Functions to Label Vectors</h1>
+      <p class="subtitle">Reducing an infinite class to a finite combinatorial quantity.</p>
+    </header>
+
+    <article>
+
+      <h2>Restriction to the sample</h2>
+
+      <p>For binary classifiers $\mathcal F \subseteq \{\pm 1\}^{\mathcal X}$, the Rademacher complexity depends on $\mathcal F$ only through its restriction to the sample:
+      $$\mathcal F\big|_{x_1^m} \;:=\; \bigl\{(f(x_1), \dots, f(x_m)) : f \in \mathcal F\bigr\} \;\subseteq\; \{\pm 1\}^m.$$
+      Distinct functions may collapse to the same label vector; only $|\mathcal F|_{x_1^m}| \le 2^m$ such vectors exist regardless of $|\mathcal F|$.</p>
+
+      <h2>The growth function</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-label">Definition</div>
+        <p>The <em>growth function</em> is the worst-case cardinality of this restriction:
+        $$\Pi_{\mathcal F}(m) \;=\; \max_{x_1, \dots, x_m \in \mathcal X}\,\bigl|\mathcal F\big|_{x_1^m}\bigr|.$$</p>
+      </div>
+
+      <h3>From analysis to combinatorics</h3>
+
+      <p>The complexity of an infinite class is reduced to a finite combinatorial quantity: the number of distinct label patterns realisable on $m$ points. The trivial bound $\Pi_{\mathcal F}(m) \le 2^m$ yields
+      $$\mathfrak R_m(\mathcal F) \;\le\; \sqrt{\frac{2 \ln 2^m}{m}} \;=\; \sqrt{2 \ln 2},$$
+      which fails to vanish as $m \to \infty$. Establishing learnability therefore requires structural conditions ensuring $\Pi_{\mathcal F}(m) \ll 2^m$.</p>
+
+      <div class="callout callout-key">
+        <div class="callout-label">Key idea</div>
+        <p>Capacity is measured by distinguishable behaviours on finite samples, not by the cardinality of $\mathcal F$.</p>
+      </div>
+
+      <h2>A small worked example</h2>
+
+      <p>Let $\mathcal F$ be threshold functions $f_\theta(x) = \mathrm{sgn}(x - \theta)$, $\theta \in \mathbb R$ — uncountably many functions. On a sample of two points $x_1 < x_2$, only three label vectors are achievable:</p>
+
+      <ul>
+        <li>$\theta < x_1$: vector $(+1, +1)$.</li>
+        <li>$x_1 \le \theta < x_2$: vector $(-1, +1)$.</li>
+        <li>$\theta \ge x_2$: vector $(-1, -1)$.</li>
+      </ul>
+
+      <p>The vector $(+1, -1)$ is unrealisable. So $\Pi_{\mathcal F}(2) = 3 < 2^2 = 4$. The class is uncountable but its growth function is small.</p>
+
+      <div class="diagram">
+        <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="170" x2="500" y2="170" stroke="#cbd2e0" stroke-width="1"/>
+          <g fill="#0F2350">
+            <circle cx="100" cy="170" r="5"/>
+            <circle cx="220" cy="170" r="5"/>
+            <circle cx="320" cy="170" r="5"/>
+            <circle cx="440" cy="170" r="5"/>
+          </g>
+          <g font-size="12" fill="#0F2350" text-anchor="middle">
+            <text x="100" y="195">$x_1$</text>
+            <text x="220" y="195">$x_2$</text>
+            <text x="320" y="195">$x_3$</text>
+            <text x="440" y="195">$x_4$</text>
+          </g>
+          <g font-size="13" fill="#D2196E" text-anchor="middle" font-weight="bold">
+            <text x="100" y="38">+1</text>
+            <text x="220" y="38">−1</text>
+            <text x="320" y="38">+1</text>
+            <text x="440" y="38">−1</text>
+          </g>
+          <path d="M 60,80  Q 160,40  220,140  T 320,80  T 440,140" stroke="#D2196E" stroke-width="2" fill="none" opacity="0.45"/>
+          <path d="M 60,90  Q 160,55  220,150  T 320,75  T 440,135" stroke="#0F2350" stroke-width="2" fill="none" opacity="0.45"/>
+          <path d="M 60,100 Q 160,30  220,160  T 320,90  T 440,130" stroke="#FFAA3C" stroke-width="2" fill="none" opacity="0.7"/>
+        </svg>
+        <div class="diagram-caption">Three different functions realising the same label vector on four points. The growth function counts label vectors, not functions.</div>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>To turn $\Pi_{\mathcal F}(m)$ into a Rademacher bound, we need a tool that converts "size of a finite set of vectors" into "expected supremum over Rademacher signs". That tool is Massart's lemma — the topic of the next section.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

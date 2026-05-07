@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6. Sauer's Lemma · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 6</div>
+      <h1>Sauer's Lemma</h1>
+      <p class="subtitle">Finite VC dimension forces polynomial growth.</p>
+    </header>
+
+    <article>
+
+      <h2>Theorem</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Theorem (Sauer)</div>
+        <p>If $\mathrm{VCdim}(\mathcal F) \le d$, then
+        $$\Pi_{\mathcal F}(m) \;\le\; \sum_{i=0}^{d}\binom{m}{i},$$
+        and for $m \ge d$,
+        $$\Pi_{\mathcal F}(m) \;\le\; \Bigl(\frac{em}{d}\Bigr)^d.$$</p>
+      </div>
+
+      <h2>Proof idea</h2>
+
+      <p>The proof uses induction on $m + d$. Removing one point $x_1$ from the sample splits the labellings into two groups:</p>
+
+      <ul>
+        <li>labellings with a unique extension at $x_1$,</li>
+        <li>labellings admitting both $\pm 1$ extensions at $x_1$.</li>
+      </ul>
+
+      <p>Let $\mathcal F_1 = \mathcal F\big|_X$ (full restriction), $\mathcal F_2 = \mathcal F\big|_{X \setminus \{x_1\}}$, and $\mathcal F_3$ = the labellings in $\mathcal F_2$ that admit both $\pm 1$ extensions at $x_1$. A direct count gives
+      $$|\mathcal F_1| = |\mathcal F_2| + |\mathcal F_3|.$$
+      </p>
+
+      <p>If a subset of labellings admits both extensions, its effective VC dimension drops by one:
+      $$\mathrm{VCdim}(\mathcal F_3) \;\le\; d - 1.$$
+      <em>Reason:</em> if $\mathcal F_3$ shattered a set of size $d$, we could add $x_1$ back and shatter a set of size $d+1$ in $\mathcal F$ — contradicting $\mathrm{VCdim}(\mathcal F) \le d$.</p>
+
+      <p>Applying the inductive hypothesis to $\mathcal F_2$ (sample size $m-1$, VCdim $\le d$) and $\mathcal F_3$ (sample size $m-1$, VCdim $\le d-1$), then using Pascal's identity $\binom{m}{i} = \binom{m-1}{i} + \binom{m-1}{i-1}$, gives the bound.</p>
+
+      <h3>From sum-of-binomials to $(em/d)^d$</h3>
+
+      <p>For $m \ge d$, multiply Sauer's bound by $(m/d)^d \cdot (d/m)^d = 1$ and use the binomial theorem:
+      $$\sum_{i=0}^d \binom{m}{i} \le \Bigl(\frac{m}{d}\Bigr)^d \sum_{i=0}^m \binom{m}{i}\Bigl(\frac{d}{m}\Bigr)^i = \Bigl(\frac{m}{d}\Bigr)^d \Bigl(1 + \frac{d}{m}\Bigr)^m \le \Bigl(\frac{em}{d}\Bigr)^d,$$
+      using $(1 + d/m)^m \le e^d$.</p>
+
+      <h2>The dichotomy</h2>
+
+      <p>Sauer's lemma forces polynomial growth where the trivial bound was exponential:
+      $$2^m \;\longrightarrow\; m^d.$$
+      That gap is what makes generalisation possible.</p>
+
+      <h2>Critical insights</h2>
+
+      <div class="callout callout-key">
+        <div class="callout-label">What this lemma actually says</div>
+        <ol>
+          <li><strong>Combinatorial collapse.</strong> Failure to shatter beyond $d$ points forces polynomial rather than exponential growth.</li>
+          <li><strong>Purely combinatorial.</strong> The proof uses counting and shattering structure rather than probability or geometry.</li>
+          <li><strong>Historical importance.</strong> Sauer's lemma is one of the foundational links between combinatorics and statistical learning theory.</li>
+        </ol>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>We have all the pieces: Massart bounds Rademacher by $\sqrt{\ln \Pi}$, and Sauer bounds $\Pi$ by $m^d$. The next section composes them into one final generalisation theorem.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>

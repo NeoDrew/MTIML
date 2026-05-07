@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4. Massart's Finite Class Lemma · VC → Rademacher</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<main class="content">
+  <div class="page">
+
+    <header class="page-header">
+      <div class="breadcrumb">Section 4</div>
+      <h1>Massart's Finite Class Lemma</h1>
+      <p class="subtitle">A square-root entropy bound on Rademacher complexity for any finite set.</p>
+    </header>
+
+    <article>
+
+      <h2>Theorem</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-label">Theorem (Massart)</div>
+        <p>Let $\mathcal A \subset \mathbb R^m$ be finite and $r = \sup_{a \in \mathcal A}\|a\|_2$. Then
+        $$\mathbb E_{\varepsilon}\!\left[\sup_{a \in \mathcal A}\,\frac{1}{m}\sum_{i=1}^m \varepsilon_i a_i\right] \;\le\; \frac{r\sqrt{2 \ln |\mathcal A|}}{m}.$$</p>
+      </div>
+
+      <h2>Proof sketch</h2>
+
+      <div class="proof">
+        <span class="proof-label">Proof.</span>
+
+        <p>With $\mu = \mathbb E_{\varepsilon}\bigl[\sup_{a \in \mathcal A}\sum_i \varepsilon_i a_i\bigr]$, Jensen's inequality and bounding the supremum by a sum yield, for any $\lambda > 0$,
+        $$e^{\lambda \mu} \;\le\; \sum_{a \in \mathcal A}\,\prod_{i=1}^m \mathbb E\!\left[e^{\lambda \varepsilon_i a_i}\right].$$</p>
+
+        <p>Since $\mathbb E[e^{\lambda \varepsilon_i a_i}] = \cosh(\lambda a_i) \le e^{\lambda^2 a_i^2 / 2}$, this gives
+        $$e^{\lambda \mu} \;\le\; |\mathcal A|\, e^{\lambda^2 r^2 / 2}.$$</p>
+
+        <p>Taking logs and dividing by $\lambda$:
+        $$\mu \;\le\; \frac{\ln|\mathcal A|}{\lambda} + \frac{\lambda r^2}{2}.$$</p>
+
+        <p>Minimising in $\lambda$ at $\lambda = \sqrt{2\ln|\mathcal A|}/r$ gives $\mu \le r\sqrt{2\ln|\mathcal A|}$. Dividing by $m$ produces the stated bound.</p>
+
+        <p class="proof-end"></p>
+      </div>
+
+      <h2>Application to $\mathcal F$</h2>
+
+      <p>Setting $\mathcal A = \mathcal F\big|_{x_1^m}$ and noting $\|a\|_2 = \sqrt m$ for any $a \in \{\pm 1\}^m$:</p>
+
+      <p>$$\mathfrak R_m(\mathcal F) \;\le\; \frac{\sqrt m \cdot \sqrt{2 \ln \Pi_{\mathcal F}(m)}}{m} \;=\; \sqrt{\frac{2 \ln \Pi_{\mathcal F}(m)}{m}}.$$</p>
+
+      <p>So Rademacher complexity of any binary class is bounded by the log of its growth function. The trivial bound $\Pi_{\mathcal F}(m) \le 2^m$ gives a non-vanishing $\sqrt{2\ln 2}$ — the next sections show how VC dimension brings this down to something that decays with $m$.</p>
+
+      <h2>Critical points</h2>
+
+      <div class="callout callout-key">
+        <div class="callout-label">What this lemma actually says</div>
+        <ol>
+          <li><strong>Sub-Gaussian concentration.</strong> The bound $\cosh(\lambda a) \le e^{\lambda^2 a^2 / 2}$ encodes that $\varepsilon a$ is sub-Gaussian with variance proxy $a^2$; this is the same machinery underlying Hoeffding's inequality.</li>
+          <li><strong>Origin of the $\sqrt{\log |\mathcal A|}$ factor.</strong> It arises from replacing the supremum with a sum, effectively a union bound. Tightening it requires <em>chaining</em> arguments (Dudley's entropy integral).</li>
+          <li><strong>Universality.</strong> The lemma applies to any finite subset of $\mathbb R^m$; its application to function classes is one instance of a general tool.</li>
+        </ol>
+      </div>
+
+      <h2>What's next</h2>
+
+      <p>We now have $\mathfrak R_m(\mathcal F) \le \sqrt{2 \ln \Pi_{\mathcal F}(m) / m}$. To turn this into a useful generalisation guarantee we need $\Pi_{\mathcal F}(m)$ to grow slowly. The next section introduces the right structural property — VC dimension — and Section 6 (Sauer's lemma) delivers the polynomial growth bound.</p>
+
+    </article>
+
+    <div id="chapter-nav-slot"></div>
+  </div>
+</main>
+
+<script src="nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$",  right: "$",  display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false,
+    });
+  });
+</script>
+</body>
+</html>
